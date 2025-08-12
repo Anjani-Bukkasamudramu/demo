@@ -1,0 +1,32 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_3de7aaad-b8c3-47b6-842c-85b46640bb95",
+  "revisionId": "v_1721022503_971071000",
+  "displayName": "ioc_sha256_hash",
+  "text": "rule ioc_sha256_hash {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detect file/process events that match watchlisted hashes in MISP\"\n    type = \"alert\"\n    tags = \"threat indicators\"\n    assumption = \"Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators\"\n    data_source = \"microsoft sysmon\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\" or $process.metadata.event_type =\"FILE_CREATION\"\n    $process.target.process.file.sha256 != \"\"\n    $process.target.process.file.sha256 = $sha256\n\n    // Correlates with MISP data; can be modified based on your MISP parser or other TI \n    $ioc.graph.metadata.product_name = \"MISP\"\n    $ioc.graph.metadata.entity_type = \"FILE\"\n    $ioc.graph.metadata.source_type = \"ENTITY_CONTEXT\"\n    $ioc.graph.entity.file.sha256 = $sha256\n\n  match:\n    $sha256 over 5m\n\n  outcome:\n    $risk_score = max(65)\n    $event_count = count_distinct($process.metadata.id)\n    // added to populate alert graph with additional context\n    $principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    // Commented out target.process.file.sha256 because it is already represented in graph as match variable. If match changes, can uncomment to add to results\n    //$target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)\n    $target_file_sha256 = array_distinct($process.target.file.sha256)\n    $target_file_full_path = array_distinct($process.target.file.full_path)\n\n  condition:\n    $process and $ioc\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
+    "data_source": "microsoft sysmon",
+    "priority": "Medium",
+    "description": "Detect file/process events that match watchlisted hashes in MISP",
+    "type": "alert",
+    "tags": "threat indicators"
+  },
+  "createTime": "2024-07-15T05:48:23.971071Z",
+  "revisionCreateTime": "2024-07-15T05:48:23.971071Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKfw0rQGEJi8hc8D",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
