@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_bd120507-ee31-456b-a3a8-afc69caca8fc",
+  "revisionId": "v_1729200540_210639000",
+  "displayName": "demoverse_suspicious_auth_unusual_interval_time",
+  "text": "rule demoverse_suspicious_auth_unusual_interval_time {\n\n    meta:\n        author = \"@cmmartin\"\n        description = \"Generates a detection for authentication activity occuring between two locations in an unusual interval of time.\"\n        severity = \"LOW\"\n        priority = \"LOW\"\n\n    events:\n        $e1.metadata.log_type = \"WORKSPACE_ACTIVITY\"\n        $e1.metadata.event_type = \"USER_LOGIN\"\n        $e1.metadata.product_event_type = \"login_success\"\n        \n        // match variables\n        $user = $e1.security_result.about.email\n        $e1_lat = $e1.principal.location.region_coordinates.latitude\n        $e1_long = $e1.principal.location.region_coordinates.longitude\n\n        // ensure consistent event sequencing, i.e., $e1 is before $e2\n        $e1.metadata.event_timestamp.seconds < $e2.metadata.event_timestamp.seconds\n        // check the $e1 and $e2 coordinates represent different locations\n        $e1_lat != $e2_lat\n        $e1_long != $e2_long\n\n        $e2.metadata.log_type = \"WORKSPACE_ACTIVITY\"\n        $e2.metadata.event_type = \"USER_LOGIN\"    \n        $e2.metadata.product_event_type = \"login_success\"\n        // match variables\n        $user = $e2.security_result.about.email\n        $e2_lat = $e2.principal.location.region_coordinates.latitude\n        $e2_long = $e2.principal.location.region_coordinates.longitude\n    \n    match:\n        $user, \n        $e1_lat, \n        $e1_long, \n        $e2_lat, \n        $e2_long \n        over 4h\n    \n    outcome:\n        // calculate the interval between first and last event, in seconds\n        $duration_hours = cast.as_int(\n            min(\n                ($e2.metadata.event_timestamp.seconds - $e1.metadata.event_timestamp.seconds) \n                / 3600\n            )\n        )\n\n        // calculate distance between login events, and convert results into kilometers\n        // - math.ceil rounds up a float up to the nearest int\n        $distance_kilometers = math.ceil(\n            max(\n                math.geo_distance(\n                    $e1_long,\n                    $e1_lat,\n                    $e2_long,\n                    $e2_lat\n                )\n            ) \n            // convert the math.geo_distance result from meters to kilometers\n            / 1000 \n        )\n\n        // calculate the speed in KPH\n        $kph = math.ceil($distance_kilometers / $duration_hours)\n\n        // // generate risk_score based on KPH, i.e., speed over distance travelled\n        $risk_score = (\n            if($kph >= 100 and $kph <= 249, 35) +\n            if($kph > 250 and $kph <= 449, 50) +\n            if($kph > 500 and $kph <= 999, 75) +\n            if($kph >= 1000, 90)\n        ) \n\n        // change this according to your requirements\n        $risk_score_threshold = 75\n    \n    condition:\n        $e1 and $e2 and $risk_score >= $risk_score_threshold\n}\n",
+  "author": "@cmmartin",
+  "severity": {
+    "displayName": "LOW"
+  },
+  "metadata": {
+    "description": "Generates a detection for authentication activity occuring between two locations in an unusual interval of time.",
+    "priority": "LOW"
+  },
+  "createTime": "2024-10-17T21:29:00.210639Z",
+  "revisionCreateTime": "2024-10-17T21:29:00.210639Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJyDxrgGEJixuGQ=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
