@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_e3240c25-a33a-4d4c-90b5-34d52b9ef59f",
+  "revisionId": "v_1716805781_717519000",
+  "displayName": "vt_relationships_file_contacts_ip",
+  "text": "rule vt_relationships_file_contacts_ip {\n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alert on known Hash contacting known IP with VT Relationships\"\n    type = \"alert\"\n    tags = \"vt\"\n    data_source = \"microsoft defender atp\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $network.metadata.event_type = \"NETWORK_CONNECTION\"\n    $network.principal.process.file.sha256 = $file_hash\n    $network.target.ip = $ip\n    $network.principal.hostname = $hostname\n\n    // Uses VirusTotal integration via entity graph, this section maps to principal process file hash\n    $vt.graph.metadata.entity_type = \"FILE\"\n    $vt.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $vt.graph.metadata.vendor_name = \"VirusTotal\"\n    $vt.graph.metadata.product_name = \"VirusTotal Relationships\"\n    $vt.graph.entity.file.sha256 = $file_hash\n\n    // Uses VirusTotal integration via entity graph, this section maps the hash to the ip address it contacts\n    $vt.graph.relations.entity_type = \"IP_ADDRESS\"\n    $vt.graph.relations.relationship = \"CONTACTS\"\n    $vt.graph.relations.entity.ip = $ip\n\n  match:\n    $hostname over 5m\n\n  outcome:\n    $risk_score = max(85)\n    $event_count = count_distinct($network.metadata.id)\n    // added to populate alert graph with additional context\n    $principal_ip = array_distinct($network.principal.ip)\n    $target_ip = array_distinct($network.target.ip)\n    $principal_process_pid = array_distinct($network.principal.process.pid)\n    $principal_process_command_line = array_distinct($network.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($network.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($network.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($network.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($network.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($network.target.process.pid)\n    $target_process_command_line = array_distinct($network.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($network.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($network.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($network.target.process.product_specific_process_id)\n    $target_process_parent_process_product_specfic_process_id = array_distinct($network.target.process.parent_process.product_specific_process_id)\n    $principal_user_userid = array_distinct($network.principal.user.userid)\n    $target_user_userid = array_distinct($network.target.user.userid)\n\n  condition:\n    $network and $vt\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "type": "alert",
+    "tags": "vt",
+    "data_source": "microsoft defender atp",
+    "priority": "High",
+    "description": "Alert on known Hash contacting known IP with VT Relationships"
+  },
+  "createTime": "2024-05-27T10:29:41.717519Z",
+  "revisionCreateTime": "2024-05-27T10:29:41.717519Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJXB0bIGEJjxkdYC",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
