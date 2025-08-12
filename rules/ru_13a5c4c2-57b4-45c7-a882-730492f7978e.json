@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_13a5c4c2-57b4-45c7-a882-730492f7978e",
+  "revisionId": "v_1729200539_681071000",
+  "displayName": "demoverse_Chrome_Browser_Alert_SideLoaded_Extensions",
+  "text": "rule demoverse_Chrome_Browser_Alert_SideLoaded_Extensions {\n  // This rule looks for extensions \"side-loaded\", or loaded directly from disk rather than the web store\n\n  meta:\n    author = \"Sam Eagle\"\n    description = \"Looks for Extensions loaded into Chrome outside of the Web store\"\n    severity = \"High\"\n\n  events:\n    $event.metadata.log_type = \"CHROME_MANAGEMENT\"\n    $event.metadata.product_event_type = \"browserExtensionInstallEvent\"\n    $event.principal.hostname = $hostname\n    $event.principal.user.email_addresses = $user\n    $event.target.resource.attribute.labels[\"extension_source\"] = \"EXTERNAL\"\n    $event.target.resource.attribute.labels[\"extension_action\"] = \"INSTALL\"\n    $event.target.user.userid = $local_user\n\n  match:\n    $user over 2m\n\n  outcome:\n    $risk_score = 75\n    $Host = array_distinct($hostname)\n    $Userid = array_distinct($user)\n    $LocalUserID = array_distinct($local_user)\n\n\n  condition:\n    $event\n}\n",
+  "author": "Sam Eagle",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Looks for Extensions loaded into Chrome outside of the Web store"
+  },
+  "createTime": "2024-10-17T21:28:59.681071Z",
+  "revisionCreateTime": "2024-10-17T21:28:59.681071Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJuDxrgGEJij4cQC",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
