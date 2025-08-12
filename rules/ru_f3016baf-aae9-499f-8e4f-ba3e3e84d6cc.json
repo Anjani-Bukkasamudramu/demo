@@ -1,0 +1,29 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_f3016baf-aae9-499f-8e4f-ba3e3e84d6cc",
+  "revisionId": "v_1732864876_530927000",
+  "displayName": "Suspicious_powershell_command_execution",
+  "text": "rule Suspicious_powershell_command_execution {\n\n\n  meta:\n   \n    author = \"TCS Cloud MDR COE team\"\n    description = \"Suspicious powershell command execution\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Initial access\"\n\n  events:\n    $e.metadata.product_event_type= \"4688\" or $e.metadata.product_event_type= \"1\"\n    $e.principal.process.command_line = \"powershell.EXE\"\n    $e.target.process.command_line = \"notepad.EXE\" or $e.target.process.command_line=\"word.EXE\" or $e.target.process.command_line=\"excel.EXE\"\n\n  outcome:\n    \n    $risk_score = 70\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Suspicious powershell command execution",
+    "type": "alert",
+    "mitre_attack_tactic": "Initial access"
+  },
+  "createTime": "2024-11-25T11:22:53.640783Z",
+  "revisionCreateTime": "2024-11-29T07:21:16.530927Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "COzWpboGEJiblf0B",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
