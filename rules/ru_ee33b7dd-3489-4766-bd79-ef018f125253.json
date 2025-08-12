@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_ee33b7dd-3489-4766-bd79-ef018f125253",
+  "revisionId": "v_1716806600_912527000",
+  "displayName": "o365_recently_created_entra_id_user_assigned_roles",
+  "text": "rule o365_recently_created_entra_id_user_assigned_roles {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects when a user is created in Entra ID and assigned roles within a defined time window.\"\n    mitre_attack_tactic = \"Persistence\"\n    mitre_attack_technique = \"Account Manipulation: Additional Cloud Roles\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1098/003/\"\n    mitre_attack_version = \"v14.1\"\n    assumption = \"The list msgraph_watchlist_roles is popualted with role names, ie Application Administrator\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    (\n        $create.metadata.event_type = \"USER_CREATION\" and \n        $create.metadata.product_event_type = \"Add user.\" and\n        $create.metadata.product_name = \"Office 365\" and\n        $create.security_result.action = \"ALLOW\" and\n        $create.target.user.userid = $userid\n    )\n    $create.metadata.event_timestamp.seconds < $role.metadata.event_timestamp.seconds\n    (\n        $role.metadata.event_type = \"USER_UNCATEGORIZED\" and\n        $role.metadata.product_event_type = \"Add member to role.\" and\n        $role.metadata.product_name = \"Office 365\" and\n        $role.security_result.action = \"ALLOW\" and\n        //If you wanted to detect on specific roles, they could be added to a reference list and the following line uncommented\n        //$role.target.resource.attribute.roles.name in %msgraph_watchlist_roles and\n        $role.target.user.userid = $userid\n    )\n\n  match:\n    $userid over 90m\n\n  outcome:\n    $risk_score = max(if($role.target.resource.attribute.roles.name = /Administrator/ nocase, 85, 35))\n    $mitre_attack_tactic = \"Persistence\"\n    $mitre_attack_technique = \"Account Manipulation: Additional Cloud Roles\"\n    $mitre_attack_technique_id = \"T1098.003\"\n    $security_summary = array_distinct($role.security_result.summary)\n    $user_agent = array_distinct($role.network.http.user_agent)\n    $assigned_role = array_distinct($role.target.resource.attribute.roles.name) \n    //added to populate alert graph with additional context\n    $principal_user_userid = array_distinct($create.principal.user.userid)\n    //Excluded since it is already being used as match variable\n    //$target_user_userid = array_distinct($create.target.user.userid)\n\n  condition:\n    $create and $role\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "assumption": "The list msgraph_watchlist_roles is popualted with role names, ie Application Administrator",
+    "type": "alert",
+    "mitre_attack_version": "v14.1",
+    "priority": "Medium",
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
+    "platform": "azure",
+    "data_source": "o365",
+    "description": "Detects when a user is created in Entra ID and assigned roles within a defined time window.",
+    "mitre_attack_tactic": "Persistence"
+  },
+  "createTime": "2024-05-27T10:43:20.912527Z",
+  "revisionCreateTime": "2024-05-27T10:43:20.912527Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CMjH0bIGEJidkLMD",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
