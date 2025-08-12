@@ -1,0 +1,27 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_4b2bd701-fa60-40db-a856-a76a9be0c0be",
+  "revisionId": "v_1733837228_355007000",
+  "displayName": "malicious_process_launch",
+  "text": "rule malicious_process_launch {\n  meta:\n    author = \"Google SecOps Gemini\"\n    description = \"Detect process launch events that have been blocked by the security system\"\n    severity = \"High\"\n  events:\n    $e.metadata.event_type = \"PROCESS_LAUNCH\"\n    $e.security_result.action = \"BLOCK\"\n  outcome:\n    $event_type = $e.metadata.event_type\n    $log_type = $e.metadata.log_type\n    $action = array($e.security_result.action)\n    $details = array($e.security_result.action_details)\n    $summary = array($e.security_result.summary)\n    $process_name = $e.target.process.file.full_path\n    $principal_hostname = $e.principal.hostname\n    $principal_user = $e.principal.user.userid\n  condition:\n    $e\n}\n",
+  "author": "Google SecOps Gemini",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Detect process launch events that have been blocked by the security system"
+  },
+  "createTime": "2024-12-10T13:27:08.355007Z",
+  "revisionCreateTime": "2024-12-10T13:27:08.355007Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKyD4boGEJj0o6kB",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
