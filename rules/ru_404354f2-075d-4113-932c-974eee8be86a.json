@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_404354f2-075d-4113-932c-974eee8be86a",
+  "revisionId": "v_1716805729_841151000",
+  "displayName": "vt_relationships_file_executes_file",
+  "text": "rule vt_relationships_file_executes_file {\n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alert on known File Hash executing known File Hash with VT Relationships.\"\n    type = \"alert\"\n    tags = \"vt\"\n    data_source = \"microsoft sysmon\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\"\n    $process.principal.process.file.sha256 = $p_file_hash\n    $process.target.process.file.sha256 = $t_file_hash\n    $process.principal.hostname = $hostname\n\n    // Uses VirusTotal integration via entity graph, this section maps to principal process file hash\n    $vt.graph.metadata.entity_type = \"FILE\"\n    $vt.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $vt.graph.metadata.vendor_name = \"VirusTotal\"\n    $vt.graph.metadata.product_name = \"VirusTotal Relationships\"\n    $vt.graph.entity.file.sha256 = $p_file_hash\n\n    // Uses VirusTotal integration via entity graph, this section maps the hash to a hash it executes\n    $vt.graph.relations.entity_type = \"FILE\"\n    $vt.graph.relations.relationship = \"EXECUTES\"\n    $vt.graph.relations.entity.file.sha256 = $t_file_hash\n\n  match:\n    $hostname over 5m\n\n  outcome:\n    $risk_score = max(85)\n    $event_count = count_distinct($process.metadata.id)\n    //added to populate alert graph with additional context\n    // Commented out principal.hostname because it is already represented in graph as match variable. If match changes, can uncomment to add to results      \n    //$principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid) \n\n  condition:\n    $process and $vt\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "tags": "vt",
+    "data_source": "microsoft sysmon",
+    "priority": "High",
+    "description": "Alert on known File Hash executing known File Hash with VT Relationships.",
+    "type": "alert"
+  },
+  "createTime": "2024-05-27T10:28:49.841151Z",
+  "revisionCreateTime": "2024-05-27T10:28:49.841151Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "COHA0bIGEJjki5ED",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
