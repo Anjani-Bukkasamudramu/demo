@@ -1,0 +1,27 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_fe21f643-91ae-4e8c-a1d3-22f9336f8444",
+  "revisionId": "v_1734054900_740847000",
+  "displayName": "TCS_Custom_ueba_login_after_brute_force_by_user_employee_id",
+  "text": "rule TCS_Custom_ueba_login_after_brute_force_by_user_employee_id {\n  meta:\n    rule_name = \"Successful auth after brute force, by user employee ID\"\n    description = \"A single IP address had several failed authentication attempts within 5 minutes, to a single user employee ID for a single application before successfully logging in.\"\n    severity = \"Low\"\n    tactic = \"TA0010\"\n  events:\n    $auth_success.metadata.event_type = \"USER_LOGIN\"\n    $auth_success.security_result.action = \"ALLOW\"\n    $auth_fail.metadata.event_type = \"USER_LOGIN\"\n    $auth_fail.security_result.action = \"BLOCK\"\n    $employee_id = $auth_success.target.user.employee_id\n    $employee_id != \"\"\n    $employee_id = $auth_fail.target.user.employee_id\n    $product_match = $auth_success.metadata.product_name\n    $product_match != \"\"\n    $product_match = $auth_fail.metadata.product_name\n    $remote_ip = $auth_success.principal.ip\n    $remote_ip != \"\"\n    $remote_ip = $auth_fail.principal.ip\n    $target_ns = $auth_success.target.namespace\n    $principal_ns = $auth_success.principal.namespace\n  match:\n    $employee_id, $product_match, $remote_ip, $target_ns, $principal_ns over 5m\n  outcome:\n    $risk_score = 35\n    $auth_fails_after_auth_success = count_distinct(if(\n        ($auth_fail.metadata.event_timestamp.seconds > $auth_success.metadata.event_timestamp.seconds) or\n        ($auth_fail.metadata.event_timestamp.seconds = $auth_success.metadata.event_timestamp.seconds and\n          $auth_fail.metadata.event_timestamp.nanos > $auth_success.metadata.event_timestamp.nanos), $auth_fail.metadata.product_log_id, \"\"))\n    $total_auth_fails = count_distinct($auth_success.metadata.product_log_id)\n    $auth_fails_before_auth_success = $total_auth_fails - $auth_fails_after_auth_success + if($total_auth_fails = $auth_fails_after_auth_success, 0, 1)\n    $auth_fails_before_auth_success_threshold = 25\n    $vendor_name = array_distinct($auth_success.metadata.vendor_name)\n    $product_name = array_distinct($auth_success.metadata.product_name)\n  condition:\n    $auth_success and $auth_fail and $auth_fails_before_auth_success > $auth_fails_before_auth_success_threshold\n  options:\n    allow_zero_values = true\n}\n",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "tactic": "TA0010",
+    "rule_name": "Successful auth after brute force, by user employee ID",
+    "description": "A single IP address had several failed authentication attempts within 5 minutes, to a single user employee ID for a single application before successfully logging in."
+  },
+  "createTime": "2024-12-13T01:55:00.740847Z",
+  "revisionCreateTime": "2024-12-13T01:55:00.740847Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CPSn7roGEJjboeEC",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
