@@ -1,0 +1,29 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_7ade2b40-cd3e-4c38-8c80-76cc726e26fc",
+  "revisionId": "v_1733210645_535199000",
+  "displayName": "Kerberos_Encryption_Downgrade",
+  "text": "rule Kerberos_Encryption_Downgrade {\n  \n\n  meta:\n    \n    author = \"TCS Cloud MDR COE team\"\n    description = \"Kerberos_Encryption_Downgrade\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Privilege escalation\"\n    mitre_attack_technique =\"Valid Accounts\"\n\n\n  events:\n    $e.metadata.product_name = \"Windows\"\n    $e.metadata.product_event_type = \"4769\"\n    $e.metadata.description =\"0x17\"\n    $e.principal.user.userid = $user\n  \n  match:\n    $user over 5m\n \n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "type": "alert",
+    "mitre_attack_tactic": "Privilege escalation",
+    "mitre_attack_technique": "Valid Accounts",
+    "description": "Kerberos_Encryption_Downgrade"
+  },
+  "createTime": "2024-12-03T07:10:54.719119Z",
+  "revisionCreateTime": "2024-12-03T07:24:05.535199Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJXkuroGEJj6mf8B",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
