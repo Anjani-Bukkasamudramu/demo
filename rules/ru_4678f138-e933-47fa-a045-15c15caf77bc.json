@@ -1,0 +1,28 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_4678f138-e933-47fa-a045-15c15caf77bc",
+  "revisionId": "v_1719334828_078383000",
+  "displayName": "Malware_Detected_EDR",
+  "text": "rule Malware_Detected_EDR {\n  // This rule matches single events. Rules can also match multiple events within\n  // some time window. For details about how to write a multi-event rule, see\n  // https://cloud.google.com/chronicle/docs/detection/yara-l-2-0-overview#single-event_versus_multi-event\n\n  meta:\n    // Allows for storage of arbitrary key-value pairs of rule details - who\n    // wrote it, what it detects on, version control, etc.\n    // The \"author\" and \"severity\" fields are special, as they are used as\n    // columns on the rules dashboard. If you'd like to be able to sort based on\n    // these fields on the dashboard, make sure to add them here.\n    // Severity value, by convention, should be \"Low\", \"Medium\" or \"High\"\n    author = \"TCS Cloud MDR COE team\"\n    description = \"Malware detected by Crowdstrike EDR\"\n    severity = \"High\"\n    tag = \"malware\"\n    type = \"alert\"\n\n  events:\n    $e.metadata.vendor_name = \"Crowdstrike\"\n    $e.metadata.log_type = \"CS_DETECTS\"\n    $e.metadata.product_name = \"Falcon\"\n    $e.principal.hostname = $host\n    $e.principal.user.user_display_name = $user\n\n  match:\n    $host over 1m\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "tag": "malware",
+    "type": "alert",
+    "description": "Malware detected by Crowdstrike EDR"
+  },
+  "createTime": "2024-06-12T12:49:08.395823Z",
+  "revisionCreateTime": "2024-06-25T17:00:28.078383Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKzv67MGEJiPsCU=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
