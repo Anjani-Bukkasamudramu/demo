@@ -1,0 +1,32 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_dca737c7-dc49-464f-9e25-dc1707ae709c",
+  "revisionId": "v_1721022654_436255000",
+  "displayName": "ag_ioc_sha256_hash_vt_basic",
+  "text": "rule ag_ioc_sha256_hash_vt_basic {  \n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Used for the Alert Graph Workshop. Detect file/process events with watchlisted hashes from MISP that VT flagged as MS Office docx file types\"\n    type = \"alert\"\n    tags = \"threat indicators, vt enrichment\"\n    assumption = \"Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators\"\n    data_source = \"microsoft sysmon\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n  \n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\" or $process.metadata.event_type =\"FILE_CREATION\"\n    $process.principal.hostname = $hostname\n    $process.target.process.file.sha256 != \"\"\n    $process.target.process.file.sha256 = $sha256\n    \n    // Enriched field from VirusTotal integration, can be commented out or modified if not using\n    $process.target.process.file.file_type = \"FILE_TYPE_DOCX\"\n    \n    // Correlates with MISP data; can be modified based on your MISP parser or other TI\n    $ioc.graph.metadata.product_name = \"MISP\"\n    $ioc.graph.metadata.entity_type = \"FILE\"\n    $ioc.graph.metadata.source_type = \"ENTITY_CONTEXT\"\n    $ioc.graph.entity.file.sha256 = $sha256\n  \n  match:\n    $hostname over 30m\n  \n  outcome:\n    $risk_score = max(65)\n    $event_count = count_distinct($process.metadata.id)\n  \n  condition:\n    $process and $ioc\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "description": "Used for the Alert Graph Workshop. Detect file/process events with watchlisted hashes from MISP that VT flagged as MS Office docx file types",
+    "type": "alert",
+    "tags": "threat indicators, vt enrichment",
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
+    "data_source": "microsoft sysmon",
+    "priority": "Medium"
+  },
+  "createTime": "2024-07-15T05:50:54.436255Z",
+  "revisionCreateTime": "2024-07-15T05:50:54.436255Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CL7x0rQGEJjygtAB",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
