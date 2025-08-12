@@ -1,0 +1,40 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_e2c717e8-81f7-4b2d-998e-a259b658f48c",
+  "revisionId": "v_1716806839_488607000",
+  "displayName": "o365_admin_login_activity_to_uncommon_mscloud_apps",
+  "text": "rule o365_admin_login_activity_to_uncommon_mscloud_apps {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"This rule detects O365 login activity to apps other than a defined list of first party MS Cloud Apps. Note that Azure Active Directory PowerShell and custom Azure apps are not in this list by default\"\n    assumption = \"The lists first_party_ms_cloud_apps and msazure_admin_watchlist are populated as needed\"\n    mitre_attack_tactic = \"Initial Access\"\n    mitre_attack_technique = \"Valid Accounts: Cloud Accounts\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1078/004/\"\n    mitre_attack_version = \"v14.1\"\n    reference = \"https://learn.microsoft.com/en-us/troubleshoot/azure/active-directory/verify-first-party-apps-sign-in\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $login.metadata.event_type = \"USER_LOGIN\"\n    $login.metadata.product_event_type = \"UserLoggedIn\"\n    $login.metadata.product_name = \"Office 365\"\n    NOT $login.target.resource.product_object_id in %first_party_ms_cloud_apps\n    $login.metadata.vendor_name = \"Microsoft\"\n    $login.security_result.action = \"ALLOW\"\n    $login.target.user.userid = $userid\n    \n    //Use the criteria below if you want to isolate activity to a specific watchlist of users\n    //@domain.com is stripped off to reduce the values in the list to just the username of the email address, can apply to userid or email address fields\n    re.replace($login.target.user.userid, `@.*$`, \"\")  in %msazure_admin_watchlist\n  \n  match:\n    $userid over 5m\n\n  outcome:\n    $risk_score = 65\n    $mitre_attack_tactic = \"Initial Access\"\n    $mitre_attack_technique = \"Valid Accounts: Cloud Accounts\"\n    $mitre_attack_technique_id = \"T1078.004\"\n    $event_count = count_distinct($login.metadata.id)\n    $target_application = array_distinct($login.target.resource.product_object_id)\n    $security_summary = array_distinct($login.security_result.summary)\n    $user_agent = array_distinct($login.network.http.user_agent)\n    $country_region_login_attempt = array_distinct($login.principal.ip_geo_artifact.location.country_or_region)\n    //added to populate alert graph with additional context\n    $principal_ip = array_distinct($login.principal.ip)\n    //$target_user_userid = array_distinct($login.target.user.userid)\n\n  condition:\n    $login\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "mitre_attack_tactic": "Initial Access",
+    "priority": "High",
+    "data_source": "o365",
+    "mitre_attack_version": "v14.1",
+    "description": "This rule detects O365 login activity to apps other than a defined list of first party MS Cloud Apps. Note that Azure Active Directory PowerShell and custom Azure apps are not in this list by default",
+    "mitre_attack_technique": "Valid Accounts: Cloud Accounts",
+    "assumption": "The lists first_party_ms_cloud_apps and msazure_admin_watchlist are populated as needed",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1078/004/",
+    "reference": "https://learn.microsoft.com/en-us/troubleshoot/azure/active-directory/verify-first-party-apps-sign-in",
+    "type": "alert",
+    "platform": "azure"
+  },
+  "createTime": "2024-05-27T10:47:19.488607Z",
+  "revisionCreateTime": "2024-05-27T10:47:19.488607Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/msazure_admin_watchlist",
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/first_party_ms_cloud_apps"
+  ],
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CLfJ0bIGEJia/ugB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
