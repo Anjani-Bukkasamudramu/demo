@@ -1,0 +1,27 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_8ab3fe0b-558c-40d0-b1fd-64160ad71843",
+  "revisionId": "v_1729200539_301935000",
+  "displayName": "demoverse_workspace_MalwareDownload",
+  "text": "rule demoverse_workspace_MalwareDownload {\nmeta:\n    author      = \"Google Cloud Security\"\n    description = \"Google detected a download of data that looks to be malware\"\n    severity    = \"Medium\"\n\tlog_source  = \"Google Workspace\"\n\nevents:\n    $event.additional.fields[\"trigger_type\"] = \"FILE_DOWNLOAD\"\n    $event.metadata.product_event_type = \"MALWARE_TRANSFER\"\n    $event.security_result.action= \"ALLOW\"\n    $event.metadata.vendor_name = \"Google Workspace\"\n    $event.additional.fields[\"trigger_user\"] = $user\n    $event.additional.fields[\"content_hash\"] = $hash\n    $event.additional.fields[\"content_name\"] = $local_file\n    $event.additional.fields[\"content_size\"] = $file_bytes\n\nmatch:\n    $user over 2m\n\noutcome:\n    $risk_score = max(75)\n    $Username = array_distinct($user)\n    $targetURL = array_distinct($event.target.url)\n    $Machine_User_Login = array_distinct($event.target.user.user_display_name)\n    $FileHash = array_distinct($hash)\n    $File_Size_Bytes = array_distinct($file_bytes)\n\ncondition:\n    $event\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "log_source": "Google Workspace",
+    "description": "Google detected a download of data that looks to be malware"
+  },
+  "createTime": "2024-10-17T21:28:59.301935Z",
+  "revisionCreateTime": "2024-10-17T21:28:59.301935Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJuDxrgGEJjT/I8B",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
