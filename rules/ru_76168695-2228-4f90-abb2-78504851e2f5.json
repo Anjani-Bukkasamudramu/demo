@@ -1,0 +1,58 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_76168695-2228-4f90-abb2-78504851e2f5",
+  "revisionId": "v_1716806274_116367000",
+  "displayName": "suspicious_ssh_connection_to_sensitive_environment",
+  "text": "rule suspicious_ssh_connection_to_sensitive_environment {\n  \n  meta:\n    author = \"IniTech Security\"\n    description = \"Allowed low prevalence SSH connection between a sensitive and non-sensitive environment\"\n    confidence = \"High\"\n    severity = \"High\"\n    priority = \"High\"\n    flag = \"0xini1249\"\n    category = \"Lateral Movement\"\n    technique = \"Remote Services\"\n    subtechnique = \"SSH\"\n\n  events:\n    // We are looking for an SSH Network Connection...\n    $ssh_netcon.metadata.event_type = \"NETWORK_CONNECTION\"\n    $ssh_netcon.metadata.product_event_type = \"ssh\"\n\n    // which were successful...\n    $ssh_netcon.security_result.action = \"ALLOW\"\n\n    // from a \"non-sensitive\" asset...\n    $ssh_netcon.principal.hostname = $source_host\n    not $ssh_netcon.principal.labels.value in %sensitive_labels\n    \n    // to a \"sensitive\" asset...\n    $ssh_netcon.target.hostname = $dest_host\n    $ssh_netcon.target.hostname != /test/\n    $ssh_netcon.target.labels.value in %sensitive_labels\n \n  match:\n    // unique connection in the last day\n    $source_host, $dest_host over 24h\n\n  outcome:\n    $tactic = max(10)\n    $technique = max(1021)\n    //$subtechnique = array(\"SSH\")\n    $principalHostname = array_distinct($ssh_netcon.principal.hostname )\n    $principalIp = array_distinct($ssh_netcon.principal.ip )\n    $principalMac = array_distinct($ssh_netcon.principal.mac )\n    $principalProcessFileMd5 = array_distinct($ssh_netcon.principal.process.file.md5 )\n    $targetHostname = array_distinct($ssh_netcon.target.hostname )\n    $targetIp = array_distinct($ssh_netcon.target.ip )\n    $targetMac = array_distinct($ssh_netcon.target.mac )\n    $targetProcessFileMd5 = array_distinct($ssh_netcon.target.process.file.md5)\n\n  condition:\n    // Then, trigger a detection if there are one or more of these connections. \n    #ssh_netcon = 1\n}\n",
+  "author": "IniTech Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "flag": "0xini1249",
+    "subtechnique": "SSH",
+    "priority": "High",
+    "category": "Lateral Movement",
+    "technique": "Remote Services",
+    "description": "Allowed low prevalence SSH connection between a sensitive and non-sensitive environment",
+    "confidence": "High"
+  },
+  "createTime": "2024-05-27T10:37:54.116367Z",
+  "revisionCreateTime": "2024-05-27T10:37:54.116367Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/sensitive_labels"
+  ],
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CILF0bIGEJi9vjc=",
+  "compilationDiagnostics": [
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 24,
+        "startColumn": 10,
+        "endLine": 24,
+        "endColumn": 43
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 29,
+        "startColumn": 6,
+        "endLine": 29,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    }
+  ],
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
