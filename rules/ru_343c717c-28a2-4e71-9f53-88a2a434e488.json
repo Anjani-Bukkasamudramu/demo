@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_343c717c-28a2-4e71-9f53-88a2a434e488",
+  "revisionId": "v_1716806097_149951000",
+  "displayName": "ursnif_malware_dns",
+  "text": "rule ursnif_malware_dns {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects when a series of events occur that align with the ursnif/ldr4 malware\"\n    reference = \"https://thedfirreport.com/2023/01/09/unwrapping-ursnifs-gifts/\"\n    platform = \"Windows\"\n    type = \"alert\"\n    data_source = \"crowdstrike\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $dns.metadata.event_type = \"NETWORK_DNS\"\n    $dns.metadata.vendor_name = \"Crowdstrike\"\n    $dns.metadata.product_event_type = \"SuspiciousDnsRequest\"\n    //$dns.principal.process.command_line = /\\.com/ nocase\n    $dns.principal.hostname = $hostname\n    $dns.network.dns.questions.name = $dns_query\n\n    $dns.metadata.event_timestamp.seconds < $net.metadata.event_timestamp.seconds\n\n    $net.metadata.event_type = \"NETWORK_CONNECTION\"\n    $net.metadata.vendor_name = \"Crowdstrike\"\n    $net.network.direction = \"OUTBOUND\"\n    $net.network.ip_protocol = \"TCP\"\n    $net.target.port = 80\n    $net.target.ip in %ursnif_Ip_addresses\n    $net.principal.hostname = $hostname\n\n  match:\n    $hostname over 15m\n\n  outcome:\n    $risk_score = 85\n\n  condition:\n    $dns and $net\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Detects when a series of events occur that align with the ursnif/ldr4 malware",
+    "reference": "https://thedfirreport.com/2023/01/09/unwrapping-ursnifs-gifts/",
+    "platform": "Windows",
+    "type": "alert",
+    "data_source": "crowdstrike",
+    "priority": "High"
+  },
+  "createTime": "2024-05-27T10:34:57.149951Z",
+  "revisionCreateTime": "2024-05-27T10:34:57.149951Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/ursnif_Ip_addresses"
+  ],
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CNHD0bIGEJikwEc=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
