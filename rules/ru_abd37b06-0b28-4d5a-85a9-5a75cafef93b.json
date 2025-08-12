@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_abd37b06-0b28-4d5a-85a9-5a75cafef93b",
+  "revisionId": "v_1716806348_589695000",
+  "displayName": "ssh_bruteforce",
+  "text": "rule ssh_bruteforce {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description =\"SSH Bruteforce Detection\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $fail.metadata.event_type = \"USER_LOGIN\"\n    $fail.metadata.product_name = \"Unix System\"\n    $fail.security_result.action = \"BLOCK\"\n    $fail.target.hostname = $host\n    $fail.principal.ip = $attacker_ip\n\n    $success.metadata.event_type = \"STATUS_UPDATE\"\n    $success.metadata.product_name = \"Unix System\"\n    $success.security_result.description = /Accepted password/\n    $success.target.hostname = $host\n    $success.principal.ip = $attacker_ip\n\n    $success.metadata.event_timestamp.seconds >= $fail.metadata.event_timestamp.seconds\n\nmatch:\n    $host, $attacker_ip over 1h\n\n  outcome:\n    $success_country = array_distinct($success.principal.ip_geo_artifact.location.country_or_region)\n\n  condition:\n    $success and #fail > 10\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "priority": "Medium",
+    "description": "SSH Bruteforce Detection"
+  },
+  "createTime": "2024-05-27T10:39:08.589695Z",
+  "revisionCreateTime": "2024-05-27T10:39:08.589695Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CMzF0bIGEJiQmJkC",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
