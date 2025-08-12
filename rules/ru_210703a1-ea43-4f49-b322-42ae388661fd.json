@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_210703a1-ea43-4f49-b322-42ae388661fd",
+  "revisionId": "v_1740553379_030943000",
+  "displayName": "win_password_spray_2",
+  "text": "rule win_password_spray_2 {\n meta:\n   author = \"Chronicle Security\"\n   description = \"Detect repeated authentication failure with multiple users indicative of a password spray attack.\"\n   severity = \"Low\"\n events:\n   $event.metadata.event_type      = \"USER_LOGIN\"\n   $event.metadata.vendor_name     = \"Microsoft\"\n   $event.principal.hostname       = $principalHost\n   $event.target.user.userid       = $targetUser\n   $event.security_result.action   = \"BLOCK\"\n match:\n   $principalHost over 30m\n outcome:\n   $risk_score = max(50)\n   $target_user_distinct_count = count_distinct($targetUser)\n   $target_user_count = count($targetUser)\n   $target_users_uniq_list = array_distinct($targetUser)\n   $tlp = array_distinct(\"amber\")\n condition:\n   #targetUser > 10\n}\n",
+  "author": "Chronicle Security",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "description": "Detect repeated authentication failure with multiple users indicative of a password spray attack."
+  },
+  "createTime": "2025-02-24T12:47:23.209023Z",
+  "revisionCreateTime": "2025-02-26T07:02:59.030943Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKP5+r0GEJjO4A4=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
