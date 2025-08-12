@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_18704444-56a5-43b8-b871-c46e2da39f72",
+  "revisionId": "v_1716806886_149903000",
+  "displayName": "o365_ADPowerShell_app_login_subsequent_activity",
+  "text": "rule o365_ADPowerShell_app_login_subsequent_activity {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Once a user authenticates to the Azure AD PowerShell application, if they take multiple admin actions indicative of establishing their own persistence with an Entra ID application within a portion of the access token time, alert for additional investigation\"\n    assumption = \"This does not take into account attempts that were blocked, just any logging of attempts for any of these actions\"\n    mitre_attack_tactic = \"Persistence\"\n    mitre_attack_technique = \"Account Manipulation: Additional Cloud Credentials\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1098/001/\"\n    mitre_attack_version = \"v14.1\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    (\n        $login.metadata.event_type = \"USER_LOGIN\" and\n        $login.metadata.product_event_type = \"UserLoggedIn\" and\n        $login.metadata.product_name = \"Office 365\" and\n        $login.metadata.vendor_name = \"Microsoft\" and\n        $login.target.resource.product_object_id = \"1b730954-1685-4b74-9bfd-dac224a7b894\" and\n        $login.security_result.action = \"ALLOW\"\n    )\n    $login.target.user.userid = $userid\n    $login.metadata.event_timestamp.seconds < $other.metadata.event_timestamp.seconds \n    (\n        (\n            $other.metadata.event_type = \"USER_RESOURCE_CREATION\" and \n            $other.metadata.product_event_type = \"Add application.\" and \n            $other.metadata.product_name = \"Office 365\" and\n            $other.metadata.vendor_name = \"Microsoft\"\n        )\n        or\n        (\n            $other.metadata.event_type = \"USER_RESOURCE_UPDATE_CONTENT\" and \n            $other.metadata.product_event_type = \"Update application.\" and \n            $other.metadata.product_name = \"Office 365\" and\n            $other.metadata.vendor_name = \"Microsoft\"\n        )\n        or\n        (\n            $other.metadata.event_type = \"USER_RESOURCE_UPDATE_PERMISSIONS\" and \n            $other.metadata.product_event_type = \"Add delegated permission grant.\" and \n            $other.metadata.product_name = \"Office 365\" and\n            $other.metadata.vendor_name = \"Microsoft\"\n        )\n        or\n        (\n            $other.metadata.event_type = \"USER_RESOURCE_UPDATE_CONTENT\" and \n            $other.metadata.product_event_type = /Update application.*Certificates and secrets management/ nocase and \n            $other.metadata.product_name = \"Office 365\" and\n            $other.metadata.vendor_name = \"Microsoft\"\n        )      \n    )\n    $other.principal.user.userid = $userid\n    $other.metadata.product_event_type = $other_event\n\n  match:\n    $userid over 90m\n\n  outcome:\n    $risk_score = max(if($other.metadata.product_event_type = \"Add application.\", 10, 0) +\n                        if($other.metadata.product_event_type = \"Update application.\", 10, 0) +\n                        if($other.metadata.product_event_type = \"Add delegated permission grant.\", 10, 0) +\n                        if($other.metadata.product_event_type = /Update application.*Certificates and secrets management/ nocase, 55, 0))\n    $mitre_attack_tactic = \"Persistence\"\n    $mitre_attack_technique = \"Account Manipulation: Additional Cloud Credentials\"\n    $mitre_attack_technique_id = \"T1098.001\"\n    $subsequent_action_threshold = 1\n    $product_event_type = array_distinct($other.metadata.product_event_type)\n    $country_region_login_attempt = array_distinct($login.principal.ip_geo_artifact.location.country_or_region)\n    //added to populate alert graph with additional context\n    $principal_ip = array_distinct($login.principal.ip)\n    //$principal_user_userid = array_distinct($other.principal.user.userid)\n    $target_resource_name = array_distinct($other.target.resource.name)\n\n  condition:\n    $login and #other_event > 0\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "priority": "Medium",
+    "mitre_attack_version": "v14.1",
+    "description": "Once a user authenticates to the Azure AD PowerShell application, if they take multiple admin actions indicative of establishing their own persistence with an Entra ID application within a portion of the access token time, alert for additional investigation",
+    "assumption": "This does not take into account attempts that were blocked, just any logging of attempts for any of these actions",
+    "mitre_attack_tactic": "Persistence",
+    "data_source": "o365",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/001/",
+    "type": "alert",
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Credentials",
+    "platform": "azure"
+  },
+  "createTime": "2024-05-27T10:48:06.149903Z",
+  "revisionCreateTime": "2024-05-27T10:48:06.149903Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CObJ0bIGEJitvUc=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
