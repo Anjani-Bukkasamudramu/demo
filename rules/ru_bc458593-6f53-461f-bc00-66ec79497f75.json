@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_bc458593-6f53-461f-bc00-66ec79497f75",
+  "revisionId": "v_1716805538_975183000",
+  "displayName": "suspicious_outbound_traffic_tor",
+  "text": "rule suspicious_outbound_traffic_tor\n{\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Outbound traffic to ports related to Tor\"\n    yara_version = \"YL2.0\"\n    rule_version = \"1.0\"\n\n  events:\n    $e1.network.direction = \"OUTBOUND\" and $e1.target.port = 9030\n    \n\n  condition:\n    $e1\n}\n",
+  "author": "Google Cloud Security",
+  "metadata": {
+    "description": "Outbound traffic to ports related to Tor",
+    "yara_version": "YL2.0",
+    "rule_version": "1.0"
+  },
+  "createTime": "2024-05-27T10:25:38.975183Z",
+  "revisionCreateTime": "2024-05-27T10:25:38.975183Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKK/0bIGEJi5gNED",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
