@@ -1,0 +1,21 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_b6bbd6fc-541d-4569-8f23-c1c56227ede3",
+  "revisionId": "v_1721022437_764703000",
+  "displayName": "ioc_hash_prevalence",
+  "text": "rule ioc_hash_prevalence {\nmeta:\nauthor = \"Chronicle\"\nevents:\n$process.metadata.event_type = \"FILE_CREATION\" or\n$process.metadata.event_type = \"PROCESS_LAUNCH\"\n$process.target.process.file.sha256 = $sha256\n$prevalence.graph.metadata.entity_type = \"FILE\"\n$prevalence.graph.metadata.source_type = \"DERIVED_CONTEXT\"\n$prevalence.graph.entity.file.prevalence.day_count = 10\n$prevalence.graph.entity.file.prevalence.rolling_max > 0\n$prevalence.graph.entity.file.prevalence.rolling_max <= 3\n$prevalence.graph.entity.file.sha256 = $sha256\n$ioc.graph.metadata.entity_type = \"FILE\"\n$ioc.graph.metadata.source_type = \"ENTITY_CONTEXT\"\n$ioc.graph.metadata.product_name = \"MISP\"\n$ioc.graph.entity.file.sha256 = $sha256\n\nmatch:\n$sha256 over 5m\n\ncondition:\n$process and $ioc and $prevalence\n}\n",
+  "author": "Chronicle",
+  "createTime": "2024-07-15T05:47:17.764703Z",
+  "revisionCreateTime": "2024-07-15T05:47:17.764703Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "COXv0rQGEJji0ewC",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
