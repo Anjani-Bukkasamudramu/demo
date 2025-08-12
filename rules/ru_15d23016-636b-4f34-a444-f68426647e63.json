@@ -1,0 +1,28 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_15d23016-636b-4f34-a444-f68426647e63",
+  "revisionId": "v_1729200540_024639000",
+  "displayName": "demoverse_mandiant_asm_confirmed_cve_alert",
+  "text": "rule demoverse_mandiant_asm_confirmed_cve_alert\n{\n  meta:\n   \n    author = \"@swenzel\"\n    data_source = \"Mandiant Attack Surface Management\"\n    description = \"Alert matching on high confidence and confirmed CVEs from Attack Surface Management (ASM)\"\n    severity = \"HIGH\"\n\n  events:\n    // Create matching conditions for the event\n    $event.metadata.product_name = \"Mandiant Attack Surface Management\" \n    $event.security_result.confidence_details = \"confirmed\"\n    $event.security_result.confidence = \"HIGH_CONFIDENCE\"\n    re.regex($event.extensions.vulns.vulnerabilities.cve_id, `CVE`) nocase\n    \n  outcome:\n    // Additional columns and enrichments to be included in the alert\n    $cve = array_distinct($event.principal.asset.vulnerabilities.cve_id)\n    $cvss_score = array_distinct($event.principal.asset.vulnerabilities.cvss_base_score)\n    $vuln_desc = array_distinct($event.principal.asset.vulnerabilities.description)\n    $url = array_distinct($event.principal.url)\n    $security_result = array_distinct($event.security_result.category_details)\n    $org = array_distinct($event.principal.ip_geo_artifact.network.organization_name)\n    $asn = array_distinct($event.principal.ip_geo_artifact.network.asn)\n    $lat = array_distinct($event.principal.location.region_coordinates.latitude)\n    $lon = array_distinct($event.principal.location.region_coordinates.longitude)\n    $desc = array_distinct($event.security_result.description)\n    $summary = array_distinct($event.security_result.summary)\n    $vendor_kb= array_distinct($event.principal.asset.vulnerabilities.vendor_knowledge_base_article_id)\n\n  condition:\n    $event\n}\n",
+  "author": "@swenzel",
+  "severity": {
+    "displayName": "HIGH"
+  },
+  "metadata": {
+    "description": "Alert matching on high confidence and confirmed CVEs from Attack Surface Management (ASM)",
+    "data_source": "Mandiant Attack Surface Management"
+  },
+  "createTime": "2024-10-17T21:29:00.024639Z",
+  "revisionCreateTime": "2024-10-17T21:29:00.024639Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJyDxrgGEJjs3ws=",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
