@@ -1,0 +1,40 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_3a6c5c36-564c-43fe-b01f-c33d009457dd",
+  "revisionId": "v_1716806438_340607000",
+  "displayName": "rw_utilities_associated_with_ntdsdit_T1003_003",
+  "text": "rule rw_utilities_associated_with_ntdsdit_T1003_003 {\n \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects process launches from processes related to ntds against key servers\"\n    type = \"alert\"\n    tags = \"list\"\n    assumption = \"Assumes lists for key servers and ntds suspicious processes have been created\"\n    data_source = \"microsoft sysmon, microsoft windows events\"\n    platform = \"Windows\"\n    mitre_attack_tactic = \"Credential Access\"\n    mitre_attack_technique = \"OS Credenital Dumping: NTDS\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1003/003/\"\n    mitre_attack_version = \"v13.1\"\n    severity = \"High\"\n    priority = \"High\"\n \n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\"\n    // ntds_suspicious_processes includes values like ntdsutil, vssadmin, diskshadow, esentutl\n    // Parses full_path for the file name to match list (excluding .exe)\n    re.capture($process.target.process.file.full_path, /.*\\\\(.*).exe/) in %ntds_suspicious_processes\n    // Replace .stackedpad.local with your domain if your key_servers list just contains hostname versus fqdn\n    // If using fqdn in your list, this re.replace function can be removed and a string match could be used instead\n    re.replace($process.principal.hostname, \".stackedpads.local\", \"\") in %key_servers\n    $process.metadata.event_type = $event_type\n\n match:\n  $event_type over 5m\n\n outcome:\n    $risk_score = max(85)\n    $mitre_attack_tactic = \"Credential Access\"\n    $mitre_attack_technique = \"OS Credenital Dumping: NTDS\"\n    $mitre_attack_technique_id = \"T1003.003\"\n    $event_count = count_distinct($process.metadata.id)\n    // added to populate alert graph with additional context\n    $principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)  \n\n  condition:\n    $process\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "assumption": "Assumes lists for key servers and ntds suspicious processes have been created",
+    "mitre_attack_version": "v13.1",
+    "tags": "list",
+    "mitre_attack_tactic": "Credential Access",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/003/",
+    "mitre_attack_technique": "OS Credenital Dumping: NTDS",
+    "priority": "High",
+    "data_source": "microsoft sysmon, microsoft windows events",
+    "description": "Detects process launches from processes related to ntds against key servers",
+    "type": "alert",
+    "platform": "Windows"
+  },
+  "createTime": "2024-05-27T10:40:38.340607Z",
+  "revisionCreateTime": "2024-05-27T10:40:38.340607Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/key_servers",
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/ntds_suspicious_processes"
+  ],
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKbG0bIGEJiAtaIB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
