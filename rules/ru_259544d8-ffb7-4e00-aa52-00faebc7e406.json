@@ -1,0 +1,29 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_259544d8-ffb7-4e00-aa52-00faebc7e406",
+  "revisionId": "v_1733374962_887999000",
+  "displayName": "Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts",
+  "text": "rule Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts {\n  \n\n  meta:\n    \n     author = \"TCS Cloud MDR COE team\"\n    description = \"Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Credential Access\"\n    mitre_attack_technique = \"Brute force\"\n\n\n  events:\n    $e.metadata.product_name = \"Windows\"\n    $e.metadata.product_event_type = \"4740\"\n    $e.principal.namespace = $user\n\n    match:\n    $user over 15m\n\n  outcome:\n    // For a multi-event rule an aggregation function is required\n    // e.g., risk_score = max(0)\n    // See https://cloud.google.com/chronicle/docs/detection/yara-l-2-0-overview#outcome_conditionals_example_rule\n    $risk_score = 0\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts",
+    "type": "alert",
+    "mitre_attack_tactic": "Credential Access",
+    "mitre_attack_technique": "Brute force"
+  },
+  "createTime": "2024-12-05T05:02:42.887999Z",
+  "revisionCreateTime": "2024-12-05T05:02:42.887999Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CPLnxLoGEJiUt6cD",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
