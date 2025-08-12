@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_e67d7309-b009-4e25-b730-4c3a660e5cad",
+  "revisionId": "v_1719125803_172207000",
+  "displayName": "mitre_attack_T1570_suspicious_command_psexec",
+  "text": "/*\n * Copyright 2023 Google LLC\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     https://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\nrule mitre_attack_T1570_suspicious_command_psexec {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Command-line execution of the PsExec tool on Windows\"\n    mitre_attack_tactic = \"Lateral Movement\"\n    mitre_attack_technique = \"Lateral Tool Transfer\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1570/\"\n    mitre_attack_version = \"v13.1\"\n    type = \"alert\"\n    platform = \"Windows\"\n    data_source = \"sentinelone\"\n    severity = \"Info\"\n    priority = \"Info\"\n\n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\"\n    $process.principal.hostname = $hostname\n    re.regex($process.principal.process.command_line, `psexec`) nocase\n\n  match:\n    $hostname over 5m\n\n  outcome:\n    $risk_score = max(15)\n    $mitre_attack_tactic = array_distinct(\"Lateral Movement\")\n    $mitre_attack_technique = array_distinct(\"Lateral Tool Transfer\")\n    $mitre_attack_technique_id = array_distinct(\"T1570\")\n    $event_count = count_distinct($process.metadata.id)\n    // added to populate alert graph with additional context\n    // Commented out principal.hostname because it is already represented in graph as match variable. If match changes, can uncomment to add to results\n    //$principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specific_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specific_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specific_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)\n\n  condition:\n    $process\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Info"
+  },
+  "metadata": {
+    "type": "alert",
+    "mitre_attack_version": "v13.1",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1570/",
+    "priority": "Info",
+    "description": "Command-line execution of the PsExec tool on Windows",
+    "mitre_attack_tactic": "Lateral Movement",
+    "data_source": "sentinelone",
+    "platform": "Windows",
+    "mitre_attack_technique": "Lateral Tool Transfer"
+  },
+  "createTime": "2024-06-23T06:56:43.172207Z",
+  "revisionCreateTime": "2024-06-23T06:56:43.172207Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKuO37MGEJjXjlI=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
