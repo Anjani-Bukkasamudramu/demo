@@ -1,0 +1,27 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_5b613fe2-7ebc-4b2f-ab89-4f28c59cdc30",
+  "revisionId": "v_1740553407_566751000",
+  "displayName": "malware_bankshot_0",
+  "text": "rule malware_bankshot_0\n{\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Bankshot malware\"\n    reference = \"https://attack.mitre.org/software/S0239/\"\n    yara_version = \"YL2.0\"\n    rule_version = \"1.0\"\n\n\n  events:\n    (\n      (\n        $e1.metadata.event_type = \"REGISTRY_MODIFICATION\" or\n        $e1.metadata.event_type = \"REGISTRY_CREATION\"\n      )\n      and\n      re.regex($e1.target.registry.registry_key, `(HKLM|HKEY_LOCAL_MACHINE)\\\\SOFTWARE\\\\Microsoft\\\\Pniumj`) nocase\n    )\n\n    or\n    (\n      $e1.network.direction = \"INBOUND\" and\n      $e1.target.port = 1058 and\n      $e1.network.sent_bytes > 10000\n    )\n\n  condition:\n    $e1\n}\n",
+  "author": "Google Cloud Security",
+  "metadata": {
+    "reference": "https://attack.mitre.org/software/S0239/",
+    "yara_version": "YL2.0",
+    "rule_version": "1.0",
+    "description": "Bankshot malware"
+  },
+  "createTime": "2025-02-20T15:23:16.296447Z",
+  "revisionCreateTime": "2025-02-26T07:03:27.566751Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CL/5+r0GEJjen44C",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
