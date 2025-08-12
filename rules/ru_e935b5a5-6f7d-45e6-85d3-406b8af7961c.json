@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_e935b5a5-6f7d-45e6-85d3-406b8af7961c",
+  "revisionId": "v_1716805805_106031000",
+  "displayName": "vt_relationships_file_contacts_domain",
+  "text": "rule vt_relationships_file_contacts_domain {\n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alert on known Hash querying a known hostname with VT Relationships\"\n    type = \"alert\"\n    tags = \"vt\"\n    data_source = \"microsoft sysmon, crowdstrike\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $dns.metadata.event_type = \"NETWORK_DNS\"\n    $dns.principal.process.file.sha256 = $file_hash\n    $dns.network.dns.questions.name = $domain\n    strings.coalesce($dns.principal.hostname, $dns.target.user.userid) = $hostname_or_userid\n\n    // Uses VirusTotal integration via entity graph, this section maps to principal process file hash\n    $vt.graph.metadata.entity_type = \"FILE\"\n    $vt.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $vt.graph.metadata.vendor_name = \"VirusTotal\"\n    $vt.graph.metadata.product_name = \"VirusTotal Relationships\"\n    $vt.graph.entity.file.sha256 = $file_hash\n\n    // Uses VirusTotal integration via entity graph, this section maps the hash to the domain it contacts\n    $vt.graph.relations.entity_type = \"DOMAIN_NAME\"\n    $vt.graph.relations.relationship = \"CONTACTS\"\n    $vt.graph.relations.entity.domain.name = $domain\n\n  match:\n    $hostname_or_userid over 5m\n\n  outcome:\n    $risk_score = max(85)\n    $event_count = count_distinct($dns.metadata.id)\n    $network_dns_questions_name = array_distinct($dns.network.dns.questions.name)\n    $network_dns_answers_data = array_distinct($dns.network.dns.answers.data)\n    // added to populate alert graph with additional context\n    $principal_ip = array_distinct($dns.principal.ip)\n    $target_ip = array_distinct($dns.target.ip)\n    $principal_process_pid = array_distinct($dns.principal.process.pid)\n    $principal_process_file_full_path = array_distinct($dns.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($dns.principal.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($dns.principal.user.userid)\n    $principal_process_command_line = array_distinct($dns.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($dns.principal.process.file.sha256)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($dns.principal.process.parent_process.product_specific_process_id)\n\n  condition:\n    $dns and $vt\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "type": "alert",
+    "tags": "vt",
+    "data_source": "microsoft sysmon, crowdstrike",
+    "priority": "High",
+    "description": "Alert on known Hash querying a known hostname with VT Relationships"
+  },
+  "createTime": "2024-05-27T10:30:05.106031Z",
+  "revisionCreateTime": "2024-05-27T10:30:05.106031Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CK3B0bIGEJjPxzI=",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
