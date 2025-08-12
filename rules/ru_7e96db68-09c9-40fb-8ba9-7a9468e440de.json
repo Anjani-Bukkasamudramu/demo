@@ -1,0 +1,30 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_7e96db68-09c9-40fb-8ba9-7a9468e440de",
+  "revisionId": "v_1733375270_409551000",
+  "displayName": "Insecure_Or_Clear_Text_Authentication_Detected",
+  "text": "rule Insecure_Or_Clear_Text_Authentication_Detected {\n  \n\n  meta:\n    \n    author = \"TCS Cloud MDR COE team\"\n    description = \"Insecure_Or_Clear_Text_Authentication_Detected\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Credential Access\"\n    mitre_attack_technique = \"Insecure Credentials\"\n\n  events:\n    \n    $e.metadata.product_name = \"Windows\"\n    $e.metadata.product_event_type = \"4624\" or $e.metadata.product_event_type = \"4776\"\n    $e.metadata.description = \"Logon Type:8\"\n\n\n  outcome:\n    \n    $risk_score = 50\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "mitre_attack_tactic": "Credential Access",
+    "mitre_attack_technique": "Insecure Credentials",
+    "description": "Insecure_Or_Clear_Text_Authentication_Detected",
+    "type": "alert"
+  },
+  "createTime": "2024-12-05T05:07:50.409551Z",
+  "revisionCreateTime": "2024-12-05T05:07:50.409551Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKbqxLoGEJiBpcMB",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
