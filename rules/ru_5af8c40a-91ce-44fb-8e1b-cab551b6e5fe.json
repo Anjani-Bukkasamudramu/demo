@@ -1,0 +1,19 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_5af8c40a-91ce-44fb-8e1b-cab551b6e5fe",
+  "revisionId": "v_1740069056_847439000",
+  "displayName": "outbound_ip_per_app",
+  "text": "rule outbound_ip_per_app {\n  meta:\n  events:\n    $e.principal.application = $app\n  match:\n    $app over 10m\n  outcome:\n    $outbound_ip_count = count($e.target.ip) // yields 2.\n  condition:\n    $e\n}\n",
+  "createTime": "2025-02-20T16:30:56.847439Z",
+  "revisionCreateTime": "2025-02-20T16:30:56.847439Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CMCx3b0GEJjJi5QD",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
