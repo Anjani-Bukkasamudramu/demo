@@ -1,0 +1,32 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_3b7b27f6-4e16-4c2b-863e-9fc76ed50761",
+  "revisionId": "v_1716806248_269695000",
+  "displayName": "sw_malware_win_lokibot_c2",
+  "text": "rule sw_malware_win_lokibot_c2 {\n    //THIS IS FOR SECOPS WORKSHOP, PLEASE DO NOT EDIT OR RUN RETROHUNTS ON THIS RULE\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Identify default Lokibot C2 Traffic\"\n    mitre_attack_tactic = \"Command and Control\"\n    mitre_attack_technique = \"Application Layer Protocol: Web Protocols\"\n    mitre_attach_url = \"https://attack.mitre.org/techniques/T1071/001/\"\n    mitre_attack_version = \"v13.1\"\n    severity = \"Critical\"\n    priority = \"Critical\"\n\n  events:\n    $network.metadata.log_type = \"ZSCALER_WEBPROXY\"\n    $network.metadata.event_type = \"NETWORK_HTTP\"\n    $network.target.url = /.*\\/fre\\.php/\n\n  outcome:\n    $risk_score = 90\n    $mitre_attack_tactic = \"Command and Control\"\n    $mitre_attack_technique = \"Application Layer Protocol: Web Protocols\"\n    $mitre_attack_technique_id = \"T1071.001\"\n    $principal_hostname = $network.principal.hostname\n    $principal_ip = array_distinct($network.principal.ip)\n    $principal_mac = array_distinct($network.principal.mac)\n    $target_hostname = $network.target.hostname\n    $target_url = $network.target.url\n\n  condition:\n    $network\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Critical"
+  },
+  "metadata": {
+    "mitre_attack_tactic": "Command and Control",
+    "mitre_attack_technique": "Application Layer Protocol: Web Protocols",
+    "mitre_attach_url": "https://attack.mitre.org/techniques/T1071/001/",
+    "mitre_attack_version": "v13.1",
+    "priority": "Critical",
+    "description": "Identify default Lokibot C2 Traffic"
+  },
+  "createTime": "2024-05-27T10:37:28.269695Z",
+  "revisionCreateTime": "2024-05-27T10:37:28.269695Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "COjE0bIGEJjwzIAB",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
