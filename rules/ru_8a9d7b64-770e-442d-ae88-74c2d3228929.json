@@ -1,0 +1,32 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_8a9d7b64-770e-442d-ae88-74c2d3228929",
+  "revisionId": "v_1716806733_799407000",
+  "displayName": "o365_entra_id_app_permissions_threshold_exceeded",
+  "text": "rule o365_entra_id_app_permissions_threshold_exceeded {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects when an excessive number of permissions are assigned to an Entra ID application within a time window, potentially indicating a greedy permission grab, as a numeric value comparing old permissions to new permissions\"\n    assumption = \"This rule does not compare the specific permissions of the old and new permissions. Removing 8 permissions and replacing with 8 different permissions would not cause this rule to trigger\"\n    reference = \"https://learn.microsoft.com/en-us/graph/permissions-reference\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $app.metadata.event_type = \"USER_RESOURCE_UPDATE_CONTENT\"\n    $app.metadata.product_name = \"Office 365\"\n    $app.metadata.product_event_type = \"Update application.\"\n    $app.metadata.vendor_name = \"Microsoft\"\n    $app.security_result.action = \"ALLOW\"\n    (\n      $app.target.resource.attribute.labels.key = /OldValue_EntitlementId-/ or\n      $app.target.resource.attribute.labels.key = /NewValue_EntitlementId-/\n    )\n    $app.security_result.detection_fields[\"target_1\"] = $app_name \n\n  match:\n    $app_name over 5m\n\n  outcome:\n    $risk_score = 65\n    $event_count = count_distinct($app.metadata.id)\n    $security_summary = array_distinct($app.security_result.summary)\n    $user_agent = array_distinct($app.network.http.user_agent)\n    $old_permissions = array_distinct(if($app.target.resource.attribute.labels.key = /OldValue_EntitlementId-/, $app.target.resource.attribute.labels.value, \"\"))\n    $new_permissions = array_distinct(if($app.target.resource.attribute.labels.key = /NewValue_EntitlementId-/, $app.target.resource.attribute.labels.value, \"\"))\n    /*\n    Apps created via the portal come with a permission of user.read, however apps created via the Graph API do not. The first time permissions are added to an app created via the API, \n    the distinct count for new permissions will be off by one. Subsequent events will reflect the correct counts of old and new permissions.\n    */    \n    $old_permissions_count = count_distinct(if($app.target.resource.attribute.labels.key = /OldValue_EntitlementId-/, $app.target.resource.attribute.labels.value, \"\")) - 1\n    $new_permissions_count = count_distinct(if($app.target.resource.attribute.labels.key = /NewValue_EntitlementId-/, $app.target.resource.attribute.labels.value, \"\")) - 1\n    $zero_handler_old = if($old_permissions_count = 0, 1)\n    $permission_diff = $new_permissions_count - $old_permissions_count\n    //added to populate alert graph with additional context\n    $principal_user_userid = array_distinct($app.principal.user.userid)\n  \n  condition:\n    //Define your threshold for the number of permissions to be exceeded to trigger\n    $app and $permission_diff > 8\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "description": "Detects when an excessive number of permissions are assigned to an Entra ID application within a time window, potentially indicating a greedy permission grab, as a numeric value comparing old permissions to new permissions",
+    "priority": "Medium",
+    "type": "alert",
+    "data_source": "o365",
+    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
+    "assumption": "This rule does not compare the specific permissions of the old and new permissions. Removing 8 permissions and replacing with 8 different permissions would not cause this rule to trigger",
+    "platform": "azure"
+  },
+  "createTime": "2024-05-27T10:45:33.799407Z",
+  "revisionCreateTime": "2024-05-27T10:45:33.799407Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CM3I0bIGEJj3l/0C",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
