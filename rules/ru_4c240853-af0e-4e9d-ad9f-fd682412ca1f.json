@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_4c240853-af0e-4e9d-ad9f-fd682412ca1f",
+  "revisionId": "v_1716806131_923519000",
+  "displayName": "ursnif_malware_activity",
+  "text": "rule ursnif_malware_activity {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects when a series of events occur that align with the ursnif/ldr4 malware\"\n    reference = \"https://thedfirreport.com/2023/01/09/unwrapping-ursnifs-gifts/\"\n    platform = \"Windows\"\n    type = \"alert\"\n    data_source = \"crowdstrike\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    $iso.metadata.event_type = \"STATUS_UPDATE\"\n    $iso.metadata.vendor_name = \"Crowdstrike\"\n    $iso.metadata.product_event_type = \"RemovableMediaVolumeMounted\"\n    $iso.target.resource.attribute.labels[\"VirtualDriveFileName\"] = /\\.iso$/ nocase\n    $iso.principal.hostname = $hostname\n\n    $iso.metadata.event_timestamp.seconds <= $lnk.metadata.event_timestamp.seconds\n\n    $lnk.metadata.event_type = \"PROCESS_LAUNCH\"\n    $lnk.metadata.vendor_name = \"Crowdstrike\"\n    $lnk.target.resource.attribute.labels[\"LinkName\"] = /\\.lnk$/ nocase\n    $lnk.target.process.command_line = /\\.bat/ nocase\n    $lnk.principal.hostname = $hostname\n\n    $lnk.metadata.event_timestamp.seconds <= $js.metadata.event_timestamp.seconds\n\n    $js.metadata.event_type = \"PROCESS_LAUNCH\"\n    $js.metadata.vendor_name = \"Crowdstrike\"\n    $js.target.process.file.full_path = /wscript/ nocase\n    $js.target.process.command_line = /\\.js/ nocase\n    $js.principal.hostname = $hostname\n\n    $js.metadata.event_timestamp.seconds <= $com.metadata.event_timestamp.seconds\n\n    $com.metadata.event_type = \"PROCESS_LAUNCH\"\n    $com.metadata.vendor_name = \"Crowdstrike\"\n    $com.target.process.command_line = /\\.com/ nocase\n    $com.principal.hostname = $hostname\n\n    $com.metadata.event_timestamp.seconds <= $dns.metadata.event_timestamp.seconds\n\n    $dns.metadata.event_type = \"NETWORK_DNS\"\n    $dns.metadata.vendor_name = \"Crowdstrike\"\n    $dns.metadata.product_event_type = \"SuspiciousDnsRequest\"\n    $dns.principal.process.command_line = /\\.com/ nocase\n    $dns.principal.hostname = $hostname\n\n  match:\n    $hostname over 5m\n\n  outcome:\n    $risk_score = 85\n    $dns_query = array_distinct($dns.network.dns.questions.name)\n\n  condition:\n    $iso and $lnk and $js and $com and $dns\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Detects when a series of events occur that align with the ursnif/ldr4 malware",
+    "reference": "https://thedfirreport.com/2023/01/09/unwrapping-ursnifs-gifts/",
+    "platform": "Windows",
+    "type": "alert",
+    "data_source": "crowdstrike",
+    "priority": "High"
+  },
+  "createTime": "2024-05-27T10:35:31.923519Z",
+  "revisionCreateTime": "2024-05-27T10:35:31.923519Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CPPD0bIGEJiQr7gD",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
