@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_8ddbce45-bcf3-49b1-b201-f531e07b1857",
+  "revisionId": "v_1716805759_036175000",
+  "displayName": "vt_relationships_file_downloaded_from_ip",
+  "text": "rule vt_relationships_file_downloaded_from_ip {\n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alert on downloading a known file hash from a known IP with VT Relationships.\"\n    type = \"alert\"\n    tags = \"vt\"\n    data_source = \"zscalar, crowdstrike\"\n    severity = \"High\"\n    priority = \"High\"\n\n  events:\n    // NETWORK_HTTP\n    $network.metadata.event_type = \"NETWORK_HTTP\"\n    $network.principal.user.userid = $userid\n    $network.target.ip = $ip\n\n    // FILE_CREATION\n    $file.metadata.event_type = \"FILE_CREATION\"\n    $file.target.user.userid = $userid\n    $file.target.file.sha256 = $file_hash\n\n    // Network HTTP event must occur before the file creation event\n    $network.metadata.event_timestamp.seconds < $file.metadata.event_timestamp.seconds\n\n    //Uses VirusTotal integration via entity graph, this section maps to target file hash\n    $vt.graph.metadata.entity_type = \"FILE\"\n    $vt.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $vt.graph.metadata.vendor_name = \"VirusTotal\"\n    $vt.graph.metadata.product_name = \"VirusTotal Relationships\"\n    $vt.graph.entity.file.sha256 = $file_hash\n\n    //Uses VirusTotal integration via entity graph, this section maps the hash to the ip address it is downloaded from   \n    $vt.graph.relations.entity_type = \"IP_ADDRESS\"\n    $vt.graph.relations.relationship = \"DOWNLOADED_FROM\"\n    $vt.graph.relations.entity.ip = $ip\n\n  match:\n    $userid over 5m\n\n  outcome:\n    $risk_score = max(85)\n    // added to populate alert graph with additional context\n    $principal_hostname = array_distinct($network.principal.hostname)\n    $target_hostname = array_distinct($network.target.hostname)\n    $principal_process_pid = array_distinct($file.principal.process.pid)\n    $principal_process_command_line = array_distinct($file.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($file.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($file.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($file.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($file.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($file.target.process.pid)\n    $target_process_command_line = array_distinct($file.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($file.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($file.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($file.target.process.product_specific_process_id)\n    $target_process_parent_process_product_specfic_process_id = array_distinct($file.target.process.parent_process.product_specific_process_id)\n    // Commented out principal.user.userid because it is already represented in graph as match variable. If match changes, can uncomment to add to results    \n    //$principal_user_userid = array_distinct($file.principal.user.userid)\n    $target_user_userid = array_distinct($file.target.user.userid)\n    $target_url = array_distinct($network.target.url)\n\n  condition:\n    $network and $file and $vt\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "type": "alert",
+    "tags": "vt",
+    "data_source": "zscalar, crowdstrike",
+    "priority": "High",
+    "description": "Alert on downloading a known file hash from a known IP with VT Relationships."
+  },
+  "createTime": "2024-05-27T10:29:19.036175Z",
+  "revisionCreateTime": "2024-05-27T10:29:19.036175Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CP/A0bIGEJj5nxE=",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
