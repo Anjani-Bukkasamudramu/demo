@@ -1,0 +1,72 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_573d6e41-e384-4957-a406-c38bcd2e5935",
+  "revisionId": "v_1729200539_495567000",
+  "displayName": "demoverse_Chrome_Browser_DLP_File_Transfer_Alert",
+  "text": "rule demoverse_Chrome_Browser_DLP_File_Transfer_Alert {\n  meta:\n    author = \"GK\"\n    description = \"Reports sensitive data event where a user allowed the event\"\n    severity = \"Low\"\n\n  events:\n    $security.metadata.product_name = \"Chrome Management\" \n    $security.metadata.product_event_type = \"sensitiveDataEvent\"\n    $security.security_result.action_details = \"EVENT_RESULT_BLOCKED\"\n    $security.security_result.rule_name != \"\"\n    $security.principal.user.email_addresses = $userid\n    $security.security_result.about.labels.value = $direction\n    $security.target.url = $url\n    $security.target.file.full_path = $local_file\n\n  match:\n      $userid over 5m\n\n  outcome:\n\n    $target_url = array_distinct($url)\n    $file_hash = array_distinct($security.target.file.sha256)\n    $Local_file = array_distinct($local_file)\n    $Action = array_distinct($direction)\n    $risk_score = max(\n      if ($security.security_result.about.labels.value = \"\", 10) +\n      if ($security.security_result.about.labels.value = \"FILE_DOWNLOAD\", 25) +\n      if ($security.security_result.about.labels.value = \"FILE_UPLOAD\", 50)\n    )\n\n  condition:\n    $security\n}\n",
+  "author": "GK",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "description": "Reports sensitive data event where a user allowed the event"
+  },
+  "createTime": "2024-10-17T21:28:59.495567Z",
+  "revisionCreateTime": "2024-10-17T21:28:59.495567Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJuDxrgGEJiBp+wB",
+  "compilationDiagnostics": [
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 13,
+        "startColumn": 6,
+        "endLine": 13,
+        "endColumn": 49
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 27,
+        "startColumn": 12,
+        "endLine": 27,
+        "endColumn": 55
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 28,
+        "startColumn": 12,
+        "endLine": 28,
+        "endColumn": 55
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 29,
+        "startColumn": 12,
+        "endLine": 29,
+        "endColumn": 55
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    }
+  ],
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
