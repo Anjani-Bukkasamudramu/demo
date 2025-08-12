@@ -1,0 +1,26 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_c0628bc4-f20e-40d8-9055-69f18e3cc464",
+  "revisionId": "v_1716805449_165359000",
+  "displayName": "win_password_spray_sc",
+  "text": "rule win_password_spray_sc {\n meta:\n   author = \"Chronicle Security\"\n   description = \"Detect repeated authentication failure from the same host but with multiple users may be indicative of a password spray attack.\"\n   severity = \"Low\"\n\n events:\n   $event.metadata.event_type      = \"USER_LOGIN\"\n   $event.metadata.vendor_name     = \"Microsoft\"\n   $event.principal.hostname       = $targetHost\n   $event.target.user.userid       = $targetUser\n   $event.security_result.action   = \"BLOCK\"\n\n match:\n   $targetHost over 30m\n\n condition:\n   #targetUser > 10\n}\n",
+  "author": "Chronicle Security",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "description": "Detect repeated authentication failure from the same host but with multiple users may be indicative of a password spray attack."
+  },
+  "createTime": "2024-05-27T10:24:09.165359Z",
+  "revisionCreateTime": "2024-05-27T10:24:09.165359Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CMm+0bIGEJjb7E4=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
