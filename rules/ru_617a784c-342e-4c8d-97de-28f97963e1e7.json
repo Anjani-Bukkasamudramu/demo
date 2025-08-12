@@ -1,0 +1,35 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_617a784c-342e-4c8d-97de-28f97963e1e7",
+  "revisionId": "v_1716805771_381007000",
+  "displayName": "vt_relationships_file_contacts_tor_ip",
+  "text": "rule vt_relationships_file_contacts_tor_ip {\n  \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alert on known Hash contacting Tor IP with VT Relationships.\"\n    mitre_attack_tactic = \"Command and Control\"\n    mitre_attack_technique = \"Proxy: Multi-hop Proxy\"\n    mitre_attach_url = \"https://attack.mitre.org/techniques/T1090/003/\"\n    mitre_attack_version = \"v13.1\"\n    type = \"alert\"\n    tags = \"vt, tor\"\n    data_source = \"microsoft defender atp\"\n    severity = \"Critical\"\n    priority = \"High\"\n\n  events:\n    $network.metadata.event_type = \"NETWORK_CONNECTION\"\n    $network.principal.process.file.sha256 = $file_hash\n    $network.target.ip = $ip\n    $network.principal.hostname = $hostname\n\n    // Uses VirusTotal integration via entity graph, this section maps to principal process file hash\n    $vt.graph.metadata.entity_type = \"FILE\"\n    $vt.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $vt.graph.metadata.vendor_name = \"VirusTotal\"\n    $vt.graph.metadata.product_name = \"VirusTotal Relationships\"\n    $vt.graph.entity.file.sha256 = $file_hash\n\n    // Uses VirusTotal integration via entity graph, this section maps the hash to the ip address it contacts\n    $vt.graph.relations.entity_type = \"IP_ADDRESS\"\n    $vt.graph.relations.relationship = \"CONTACTS\"\n    $vt.graph.relations.entity.ip = $ip\n\n    // Tor IP listing provided by GCTI Feed\n    $gcti.graph.entity.artifact.ip = $ip\n    $gcti.graph.metadata.entity_type = \"IP_ADDRESS\"\n    $gcti.graph.metadata.source_type = \"GLOBAL_CONTEXT\"\n    $gcti.graph.metadata.threat.threat_feed_name = \"Tor Exit Nodes\"\n    $gcti.graph.metadata.vendor_name = \"Google Cloud Threat Intelligence\"\n    $gcti.graph.metadata.product_name = \"GCTI Feed\"\n\n  match:\n    $hostname over 5m\n\n  outcome: \n    $risk_score = max(\n        if($gcti.graph.metadata.threat.confidence = \"HIGH_CONFIDENCE\", 70) +\n        // Unauthorized target geographies\n        if($network.target.ip_geo_artifact.location.country_or_region = \"Cuba\", 20) +\n        if($network.target.ip_geo_artifact.location.country_or_region = \"Iran\", 20) +\n        if($network.target.ip_geo_artifact.location.country_or_region = \"North Korea\", 20) +\n        if($network.target.ip_geo_artifact.location.country_or_region = \"Russia\", 20) +\n        if($network.target.ip_geo_artifact.location.country_or_region = \"Syria\", 20)\n    )\n    $mitre_attack_tactic = \"Command and Control\"\n    $mitre_attack_technique = \"Proxy: Multi-hop Proxy\"\n    $mitre_attack_technique_id = \"T1090.003\"\n    $event_count = count_distinct($network.metadata.id)\n    $count_file_hash = count_distinct($file_hash)\n    $count_tor_ips = count_distinct($ip)\n    $tor_geoip_country = array_distinct($network.target.ip_geo_artifact.location.country_or_region)\n    $tor_geoip_state = array_distinct($network.target.ip_geo_artifact.location.state)\n    // added to populate alert graph with additional context\n    $principal_ip = array_distinct($network.principal.ip)\n    $target_ip = array_distinct($network.target.ip)\n    $principal_process_pid = array_distinct($network.principal.process.pid)\n    $principal_process_command_line = array_distinct($network.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($network.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($network.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($network.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($network.principal.process.parent_process.product_specific_process_id)\n    //$target_process_pid = array_distinct($network.target.process.pid)\n    //$target_process_command_line = array_distinct($network.target.process.command_line)\n    //$target_process_file_sha256 = array_distinct($network.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($network.target.process.file.full_path)\n    //$target_process_product_specfic_process_id = array_distinct($network.target.process.product_specific_process_id)\n    //$target_process_parent_process_product_specfic_process_id = array_distinct($network.target.process.parent_process.product_specific_process_id)\n    $principal_user_userid = array_distinct($network.principal.user.userid)\n    //$target_user_userid = array_distinct($network.target.user.userid)\n    $target_url = array_distinct($network.target.url)\n\n  condition:\n    $network and $vt and $gcti\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Critical"
+  },
+  "metadata": {
+    "data_source": "microsoft defender atp",
+    "description": "Alert on known Hash contacting Tor IP with VT Relationships.",
+    "mitre_attach_url": "https://attack.mitre.org/techniques/T1090/003/",
+    "tags": "vt, tor",
+    "priority": "High",
+    "type": "alert",
+    "mitre_attack_technique": "Proxy: Multi-hop Proxy",
+    "mitre_attack_tactic": "Command and Control",
+    "mitre_attack_version": "v13.1"
+  },
+  "createTime": "2024-05-27T10:29:31.381007Z",
+  "revisionCreateTime": "2024-05-27T10:29:31.381007Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CIvB0bIGEJjp1rUB",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
