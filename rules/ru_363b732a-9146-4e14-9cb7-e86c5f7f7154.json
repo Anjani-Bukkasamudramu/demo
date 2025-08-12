@@ -1,0 +1,38 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_363b732a-9146-4e14-9cb7-e86c5f7f7154",
+  "revisionId": "v_1716806872_438751000",
+  "displayName": "o365_add_user_to_admin_role",
+  "text": "rule o365_add_user_to_admin_role {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Adding users to administrative roles is not malicious, but due to the sensitivity of certain roles, validation should occur when this occurs\"\n    assumption = \"The list msgraph_watchlist_roles is popualted with role names, example: Application Administrator\"\n    mitre_attack_tactic = \"Persistence\"\n    mitre_attack_technique = \"Account Manipulation: Additional Cloud Roles\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1098/003/\"\n    mitre_attack_version = \"v14.1\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $app.metadata.event_type = \"USER_UNCATEGORIZED\"\n    $app.metadata.product_event_type = \"Add member to role.\"\n    $app.metadata.product_name = \"Office 365\"\n    $app.metadata.vendor_name = \"Microsoft\"\n    $app.security_result.action = \"ALLOW\"\n    $app.target.resource.attribute.roles.name in %msgraph_watchlist_roles\n    $app.principal.user.userid = $userid\n  \n  match:\n    $userid over 5m\n\n  outcome:\n    $risk_score = 65\n    $mitre_attack_tactic = \"Persistence\"\n    $mitre_attack_technique = \"Account Manipulation: Additional Cloud Roles\"\n    $mitre_attack_technique_id = \"T1098.003\"\n    $event_count = count_distinct($app.metadata.id)\n    $security_summary = array_distinct($app.security_result.summary)\n    $user_agent = array_distinct($app.network.http.user_agent)\n    $assigned_role = array_distinct($app.target.resource.attribute.roles.name) \n    //added to populate alert graph with additional context\n    //$principal_user_userid = array_distinct($app.principal.user.userid)\n    $target_user_userid = array_distinct($app.target.user.userid)\n\n  condition:\n    $app  \n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "type": "alert",
+    "data_source": "o365",
+    "mitre_attack_version": "v14.1",
+    "platform": "azure",
+    "description": "Adding users to administrative roles is not malicious, but due to the sensitivity of certain roles, validation should occur when this occurs",
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
+    "mitre_attack_tactic": "Persistence",
+    "priority": "Medium",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
+    "assumption": "The list msgraph_watchlist_roles is popualted with role names, example: Application Administrator"
+  },
+  "createTime": "2024-05-27T10:47:52.438751Z",
+  "revisionCreateTime": "2024-05-27T10:47:52.438751Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/msgraph_watchlist_roles"
+  ],
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CNjJ0bIGEJiem9EB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
