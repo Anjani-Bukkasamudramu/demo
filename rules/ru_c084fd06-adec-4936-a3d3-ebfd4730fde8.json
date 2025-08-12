@@ -1,0 +1,31 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_c084fd06-adec-4936-a3d3-ebfd4730fde8",
+  "revisionId": "v_1716806261_163999000",
+  "displayName": "suspicious_unusual_location_lnk_file",
+  "text": "rule suspicious_unusual_location_lnk_file {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects creation and movement of .lnk files to specific folders\"\n    type = \"alert\"\n    data_source = \"microsoft sysmon\"\n    platform = \"Windows\"\n    severity = \"Low\"\n    priority = \"Low\"\n   \n  events:\n    (\n      $file.metadata.event_type = \"FILE_CREATION\" or\n      $file.metadata.event_type = \"FILE_MODIFICATION\" or\n      $file.metadata.event_type = \"FILE_COPY\" or\n      $file.metadata.event_type = \"FILE_MOVE\"\n    )\n    //and is optional, implied when broken out by line\n    and\n    $file.target.file.full_path = /\\.lnk$/ nocase and\n    //Looking in the desktop, documents and start menu folders, can be modified to look in different folders\n    $file.target.file.full_path = /\\\\(Desktop|Documents|Start Menu)\\\\.*/ nocase\n\n  outcome:\n    $risk_score = 35\n    //added to populate alert graph with additional context\n    $principal_hostname = $file.principal.hostname\n    $target_hostname = $file.target.hostname\n    $src_hostname = $file.src.hostname\n    $principal_process_pid = $file.principal.process.pid\n    $principal_process_command_line = $file.principal.process.command_line\n    $principal_process_file_sha256 = $file.principal.process.file.sha256\n    $principal_process_file_full_path = $file.principal.process.file.full_path\n    $principal_process_product_specfic_process_id = $file.principal.process.product_specific_process_id\n    $principal_process_parent_process_product_specfic_process_id = $file.principal.process.parent_process.product_specific_process_id\n    $principal_user_userid = $file.principal.user.userid\n    $src_user_userid = $file.principal.user.userid\n    $target_file_sha256 = $file.target.file.sha256\n    $target_file_full_path = $file.target.file.full_path\n    $src_file_sha256 = $file.src.file.sha256\n    $src_file_full_path = $file.src.file.full_path\n  \n  condition:\n    $file\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "type": "alert",
+    "data_source": "microsoft sysmon",
+    "platform": "Windows",
+    "priority": "Low",
+    "description": "Detects creation and movement of .lnk files to specific folders"
+  },
+  "createTime": "2024-05-27T10:37:41.163999Z",
+  "revisionCreateTime": "2024-05-27T10:37:41.163999Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CPXE0bIGEJjamU4=",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
