@@ -1,0 +1,30 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_59fea486-6477-4d68-aec0-c96c789d70b2",
+  "revisionId": "v_1733213563_728959000",
+  "displayName": "Account_Added_in_Sensitive_Privileged_Security_Groups",
+  "text": "rule Account_Added_in_Sensitive_Privileged_Security_Groups {\n  \n\n  meta:\n    \n\n    author = \"TCS Cloud MDR COE team\"\n    description = \"Account_Added_in_Sensitive_Privileged_Security_Groups\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Privilege escalation\"\n    mitre_attack_technique = \"valid accounts\"\n\n\n  events:\n\n    $e.metadata.product_name = \"Windows\"\n    $e.metadata.product_event_type = \"4727\" or $e.metadata.product_event_type=\"4728\" or $e.metadata.product_event_type=\"4729\" or $e.metadata.product_event_type=\"4730\"\n\n  outcome:\n\n    $risk_score = 50\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "mitre_attack_tactic": "Privilege escalation",
+    "mitre_attack_technique": "valid accounts",
+    "description": "Account_Added_in_Sensitive_Privileged_Security_Groups",
+    "type": "alert"
+  },
+  "createTime": "2024-12-03T08:12:43.728959Z",
+  "revisionCreateTime": "2024-12-03T08:12:43.728959Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CPv6uroGEJiQzNsC",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
