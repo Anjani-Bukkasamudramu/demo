@@ -1,0 +1,50 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_47f12758-308e-481b-80c3-57f5f1464f46",
+  "revisionId": "v_1729200539_065631000",
+  "displayName": "demoverse_Chrome_Browser_DLP_Alert_Paste_Content",
+  "text": "rule demoverse_Chrome_Browser_DLP_Alert_Paste_Content {\n  meta:\n    author = \"GK\"\n    description = \"Reports pastes of sensitive data to unauthorized sites \"\n    severity = \"High\"\n\n  events:\n    $security.metadata.product_name = \"Chrome Management\" \n    $security.metadata.product_event_type = \"sensitiveDataEvent\"\n    $security.security_result.about.labels.value = \"WEB_CONTENT_UPLOAD\"\n    $security.security_result.rule_name != \"\"\n    $security.principal.user.email_addresses = $userid\n    $security.security_result.about.labels.value = $direction\n    $security.target.url = $url\n    $security.target.file.full_path = \"Text data\"\n\n  match:\n      $userid over 2m\n\n  outcome:\n    $tlp = array_distinct(\"amber\")\n    $target_url = array_distinct($url)\n    $Local_file = array_distinct($security.target.file.full_path)\n    $Action = array_distinct($direction)\n    $host = array_distinct($security.principal.hostname)\n    $machine_local_user = array_distinct($security.target.user.userid)\n    $risk_score = max(50)\n\n  condition:\n    $security\n}\n",
+  "author": "GK",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "description": "Reports pastes of sensitive data to unauthorized sites "
+  },
+  "createTime": "2024-10-17T21:28:59.065631Z",
+  "revisionCreateTime": "2024-10-17T21:28:59.065631Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJuDxrgGEJjmpR8=",
+  "compilationDiagnostics": [
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 10,
+        "startColumn": 6,
+        "endLine": 10,
+        "endColumn": 49
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 13,
+        "startColumn": 6,
+        "endLine": 13,
+        "endColumn": 49
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    }
+  ],
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
