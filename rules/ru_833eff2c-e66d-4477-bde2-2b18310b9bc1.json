@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_833eff2c-e66d-4477-bde2-2b18310b9bc1",
+  "revisionId": "v_1716806712_301263000",
+  "displayName": "o365_entra_id_client_secret_add_update_delete_in_app",
+  "text": "rule o365_entra_id_client_secret_add_update_delete_in_app {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Secrets added to applications have legitimate purposes, but can also be a method of persistence. This alert will trigger on creation, modification or delete of a client secret\"\n    mitre_attack_tactic = \"Persistence\"\n    mitre_attack_technique = \"Account Manipulation: Additional Cloud Credentials\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1098/001/\"\n    mitre_attack_version = \"v14.1\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $app.metadata.event_type = \"USER_RESOURCE_UPDATE_CONTENT\"\n    $app.metadata.product_name = \"Office 365\"\n    $app.metadata.product_event_type = /Update application.*Certificates and secrets management/\n    $app.metadata.vendor_name = \"Microsoft\"\n    $app.security_result.action = \"ALLOW\"\n    $app.principal.user.userid = $userid\n    \n  match:\n    $userid over 5m\n\n  outcome:\n    $risk_score = 65\n    $mitre_attack_tactic = \"Persistence\"\n    $mitre_attack_technique = \"Account Manipulation: Additional Cloud Credentials\"\n    $mitre_attack_technique_id = \"T1098.001\"\n    $event_count = count_distinct($app.metadata.id)\n    $security_summary = array_distinct($app.security_result.summary)\n    $user_agent = array_distinct($app.network.http.user_agent)\n    $target_entra_id_application = array_distinct(re.capture($app.network.http.user_agent,`\\\"AppId\\\":\\\"(.*)`))\n    //added to populate alert graph with additional context\n    //$principal_user_userid = array_distinct($app.principal.user.userid)\n\n  condition:\n    $app  \n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "description": "Secrets added to applications have legitimate purposes, but can also be a method of persistence. This alert will trigger on creation, modification or delete of a client secret",
+    "platform": "azure",
+    "data_source": "o365",
+    "mitre_attack_tactic": "Persistence",
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Credentials",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/001/",
+    "type": "alert",
+    "priority": "Medium",
+    "mitre_attack_version": "v14.1"
+  },
+  "createTime": "2024-05-27T10:45:12.301263Z",
+  "revisionCreateTime": "2024-05-27T10:45:12.301263Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CLjI0bIGEJjR048B",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
