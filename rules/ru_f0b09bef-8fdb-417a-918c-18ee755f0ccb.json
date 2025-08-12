@@ -1,0 +1,35 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_f0b09bef-8fdb-417a-918c-18ee755f0ccb",
+  "revisionId": "v_1716806537_105215000",
+  "displayName": "recon_environment_enumeration_system_cisa_report",
+  "text": "rule recon_environment_enumeration_system_cisa_report {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects system enumeration events as identified in CISA Living of the Land pdf. Alone they may be normal but in concert, they may be worth looking into\"\n    type = \"hunt\"\n    platform = \"Windows\"\n    data_source = \"microsoft sysmon, windows event logs\"\n    mitre_attack_tactic = \"Discovery\"\n    mitre_attack_technique = \"System Information Discovery\"\n    mitre_attack_url = \"https://attack.mitre.org/versions/v13/techniques/T1082/\"\n    mitre_attack_version = \"v13.1\"\n    reference = \"https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF\"\n    severity = \"Low\"\n    priority = \"Low\"\n\n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\"\n    $process.principal.hostname = $hostname\n    $process.target.process.command_line = $command_line\n\n    re.regex($process.target.process.command_line, `wevtutil.*qe.*security.*\\/rd:true.*\\/f:text.*\\/q:.*\\[System\\[\\(EventID`) nocase\n    // below is the more specific command down to the event id, could comment out the about and use this instead if desired\n    //re.regex($process.target.process.command_line, `wevtutil.*qe.*security.*\\/rd:true.*\\/f:text.*\\/q:\\*\\[System\\[\\(EventID=4624\\).*TimeCreated\\[@SystemTime.*\\]\\].*EventData\\[Data.*\\]\\]`) nocase\n\n    or\n\n    // cisa report referenced cmd /c in their report throughout, can filter this in/out for tuning as desired\n    // other wmic switches like /user and /password, these have been excluded to focus on the commands being issued since local access does not require these\n    (\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*ldifde.exe.*-f.*-p.*subtree`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*reg.*query.*hklm\\\\software\\\\`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*systeminfo`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*tasklist.*\\/v`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*whoami`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*volume.*list.*brief`) nocase or\n        // cisa report called out wmic volume list brief, below is alternate that removed brief to widen criteria\n        //re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*volume.*list`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*service.*brief`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*product.*list.*brief`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*baseboard.*list.*full`) nocase or\n        re.regex($process.target.process.command_line, `(|cmd.*/c).*wmic.*path.*win32_logicaldisk.*get.*(caption|filesystem|freespace|size|volumename)`) nocase\n    )\n\n  match:\n    $hostname over 30m\n\n  outcome:\n    $risk_score = max(35)\n    $mitre_attack_tactic = \"Discovery\"\n    $mitre_attack_technique = \"System Information Discovery\"\n    $mitre_attack_technique_id = \"T1082\"\n    $event_count = count_distinct($process.metadata.id)\n    $unique_command_line_threshold = max(5)\n    // added to populate alert graph with additional context\n    // Commented out principal.hostname because it is already represented in graph as match variable. If match changes, can uncomment to add to results\n    //$principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)\n\n  condition:\n    // modify the condition value for command line to throttle how many of these commands can be issued until the rule is triggered\n    $process and #command_line > 15\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1082/",
+    "mitre_attack_technique": "System Information Discovery",
+    "mitre_attack_version": "v13.1",
+    "type": "hunt",
+    "data_source": "microsoft sysmon, windows event logs",
+    "priority": "Low",
+    "description": "Detects system enumeration events as identified in CISA Living of the Land pdf. Alone they may be normal but in concert, they may be worth looking into",
+    "mitre_attack_tactic": "Discovery",
+    "reference": "https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF",
+    "platform": "Windows"
+  },
+  "createTime": "2024-05-27T10:42:17.105215Z",
+  "revisionCreateTime": "2024-05-27T10:42:17.105215Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CInH0bIGEJjolTI=",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
