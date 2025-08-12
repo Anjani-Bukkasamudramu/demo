@@ -1,0 +1,33 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_376eba5e-a19c-4f25-beed-aef9d7b50bd1",
+  "revisionId": "v_1716806611_781535000",
+  "displayName": "o365_persistent_login_activity_to_azure_ADPowerShell_app",
+  "text": "rule o365_persistent_login_activity_to_azure_ADPowerShell_app {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Continual logins to Azure AD PowerShell app are not a security best practice, if this is observed, additional investigation is needed\"\n    mitre_attack_tactic = \"Lateral Movement\"\n    mitre_attack_technique = \"Remote Services: Cloud Services\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1021/007/\"\n    mitre_attack_version = \"v14.1\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $login.metadata.event_type = \"USER_LOGIN\"\n    $login.metadata.product_event_type = \"UserLoggedIn\"\n    $login.metadata.product_name = \"Office 365\"\n    $login.metadata.vendor_name = \"Microsoft\"\n    $login.target.resource.product_object_id = \"1b730954-1685-4b74-9bfd-dac224a7b894\"\n    $login.security_result.action = \"ALLOW\"\n    $login.target.user.userid = $userid\n    $login.metadata.event_timestamp.seconds = $time\n  \n  match:\n    $userid over 24h\n\n  outcome:\n    $risk_score = 65\n    $mitre_attack_tactic = \"Lateral Movement\"\n    $mitre_attack_technique = \"Remote Services: Cloud Services\"\n    $mitre_attack_technique_id = \"T1021.007\"\n    $event_count = count_distinct($login.metadata.id)\n    $entra_id_login_threshold = 2\n    $security_summary = array_distinct($login.security_result.summary)\n    $user_agent = array_distinct($login.network.http.user_agent)\n    $country_region_login_attempt = array_distinct($login.principal.ip_geo_artifact.location.country_or_region)\n    //added to populate alert graph with additional context\n    $principal_ip = array_distinct($login.principal.ip)\n    //$target_user_email_addresses = array_distinct($login.target.user.email_addresses)\n    //$target_user_userid = array_distinct($login.target.user.userid)\n\n  condition:\n    // Can set based on your own threshold  \n    #time > 1\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "mitre_attack_tactic": "Lateral Movement",
+    "description": "Continual logins to Azure AD PowerShell app are not a security best practice, if this is observed, additional investigation is needed",
+    "type": "alert",
+    "platform": "azure",
+    "mitre_attack_technique": "Remote Services: Cloud Services",
+    "mitre_attack_version": "v14.1",
+    "data_source": "o365",
+    "priority": "Medium",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1021/007/"
+  },
+  "createTime": "2024-05-27T10:43:31.781535Z",
+  "revisionCreateTime": "2024-05-27T10:43:31.781535Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CNPH0bIGEJiO1fQC",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
