@@ -1,0 +1,30 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_a773ac0a-8ee3-40c9-bfce-00781d71ec1a",
+  "revisionId": "v_1733328905_982191000",
+  "displayName": "Audit_Log_Cleared",
+  "text": "rule Audit_Log_Cleared {\n  \n\n  meta:\n    \n    author = \"TCS Cloud MDR COE team\"\n    description = \"Audit_Log_Cleared\"\n    severity = \"High\"\n    type = \"alert\"\n    mitre_attack_tactic = \"Defense Evasion\"\n    mitre_attack_technique = \"File Deletion\"\n\n\n  events:\n    $e.metadata.event_type = \"USER_CREATION\"\n    $e.metadata.product_event_type= \"1102\" or $e.metadata.product_event_type= \"1104\" or $e.metadata.product_event_type= \"517\" or $e.metadata.product_event_type= \"104\"\n\n  outcome:\n   \n    $risk_score = 60\n\n  condition:\n    $e\n}\n",
+  "author": "TCS Cloud MDR COE team",
+  "severity": {
+    "displayName": "High"
+  },
+  "metadata": {
+    "type": "alert",
+    "mitre_attack_tactic": "Defense Evasion",
+    "mitre_attack_technique": "File Deletion",
+    "description": "Audit_Log_Cleared"
+  },
+  "createTime": "2024-12-04T16:01:57.841135Z",
+  "revisionCreateTime": "2024-12-04T16:15:05.982191Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CImAwroGEJiXrNQD",
+  "nearRealTimeLiveRuleEligible": true,
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
