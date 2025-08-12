@@ -1,0 +1,35 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_746aab0c-191c-490a-92ee-1242612ace00",
+  "revisionId": "v_1716806794_383583000",
+  "displayName": "o365_entra_id_app_modify_permission_change_on_watchlist",
+  "text": "rule o365_entra_id_app_modify_permission_change_on_watchlist {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Alerts when a permission on the watchlist is applied to an Entra ID application.\"\n    reference = \"https://learn.microsoft.com/en-us/graph/permissions-reference\"\n    assumption = \"The list msgraph_watchlist_permissions is populated as needed with guid permissions Example: 024d486e-b451-40bb-833d-3e66d98c5c73 //Mail.Read.Write\"\n    type = \"alert\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $app.metadata.event_type = \"USER_RESOURCE_UPDATE_CONTENT\"\n    $app.metadata.product_name = \"Office 365\"\n    $app.metadata.product_event_type = \"Update application.\"\n    $app.metadata.vendor_name = \"Microsoft\"\n    $app.security_result.action = \"ALLOW\"\n    (\n        $app.target.resource.attribute.labels.key = /NewValue_EntitlementId-/ or\n        $app.target.resource.attribute.labels.key = /OldValue_EntitlementId-/\n    )\n    $app.security_result.detection_fields[\"target_1\"] = $app_name \n\n  match:\n    $app_name over 5m\n\n  outcome:\n    $risk_score = 65\n    $event_count = count_distinct($app.metadata.id)\n    $security_summary = array_distinct($app.security_result.summary)\n    $user_agent = array_distinct($app.network.http.user_agent)\n    $watchlist_permissions_after_modification = array_distinct(if($app.target.resource.attribute.labels.key = /NewValue_EntitlementId/ and $app.target.resource.attribute.labels.value IN %msgraph_watchlist_permissions, $app.target.resource.attribute.labels.value,\"\"))\n    $watchlist_permissions_before_modification = array_distinct(if($app.target.resource.attribute.labels.key = /OldValue_EntitlementId/ and $app.target.resource.attribute.labels.value IN %msgraph_watchlist_permissions, $app.target.resource.attribute.labels.value,\"\"))\n    $permissions_after_modification = array_distinct(if($app.target.resource.attribute.labels.key = /NewValue_EntitlementId/ and $app.target.resource.attribute.labels.value !=\"\", $app.target.resource.attribute.labels.value,\"\"))\n    $permissions_before_modification = array_distinct(if($app.target.resource.attribute.labels.key = /OldValue_EntitlementId/ and $app.target.resource.attribute.labels.value !=\"\", $app.target.resource.attribute.labels.value,\"\"))\n    $total_permissions_after_modification = count_distinct(if($app.target.resource.attribute.labels.key = /NewValue_EntitlementId/ and $app.target.resource.attribute.labels.value !=\"\", $app.target.resource.attribute.labels.value, \"\")) - 1\n    $total_permissions_before_modification = count_distinct(if($app.target.resource.attribute.labels.key = /OldValue_EntitlementId/ and $app.target.resource.attribute.labels.value !=\"\", $app.target.resource.attribute.labels.value, \"\")) - 1\n    //added to populate alert graph with additional context\n    $principal_user_userid = array_distinct($app.principal.user.userid)\n\n  condition:\n    $app\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "type": "alert",
+    "platform": "azure",
+    "data_source": "o365",
+    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
+    "description": "Alerts when a permission on the watchlist is applied to an Entra ID application.",
+    "assumption": "The list msgraph_watchlist_permissions is populated as needed with guid permissions Example: 024d486e-b451-40bb-833d-3e66d98c5c73 //Mail.Read.Write",
+    "priority": "Medium"
+  },
+  "createTime": "2024-05-27T10:46:34.383583Z",
+  "revisionCreateTime": "2024-05-27T10:46:34.383583Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/msgraph_watchlist_permissions"
+  ],
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CIrJ0bIGEJiG9LYB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
