@@ -1,0 +1,32 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_795781ab-49ee-42f4-8bee-9fedf2d487e0",
+  "revisionId": "v_1721022617_303439000",
+  "displayName": "ioc_domain_internal_policy",
+  "text": "rule ioc_domain_internal_policy {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detect DNS events that communicate with gaming sites in MISP. These violate policy.\"\n    type = \"alert\"\n    tags = \"threat indicators\"\n    assumption = \"Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators\"\n    data_source = \"microsoft sysmon\"\n    severity = \"Low\"\n    priority = \"Low\"\n\n  events:\n    $dns.metadata.event_type = \"NETWORK_DNS\"\n    $dns.network.dns.questions.name = $dns_query\n  \n    // Correlates with MISP data; can be modified based on your MISP parser or other TI\n    $ioc.graph.metadata.product_name = \"MISP\"\n    $ioc.graph.metadata.entity_type = \"DOMAIN_NAME\"\n    $ioc.graph.metadata.source_type = \"ENTITY_CONTEXT\"\n    // Summary is used to focus on a specific subset of MISP indicators, can modify as needed\n    $ioc.graph.metadata.threat.summary = \"Gaming Sites\"\n    // Threat Feed Name is used to focus on a specific subset of MISP indicators, can modify as needed\n    $ioc.graph.metadata.threat.threat_feed_name = \"Internal\"\n    $ioc.graph.entity.hostname = $dns_query\n    // Regex used to extract subset of data from field description, optional\n    re.capture($ioc.graph.metadata.threat.description, \"additional info: (.*)\") = $info\n\n  match:\n    $dns_query over 5m\n \n  outcome:\n    $risk_score = max(35)\n    $event_count = count_distinct($dns.metadata.id)\n    // If not doing any additional extractions to $info placeholder variable, the following outcome variable can be removed\n    $threat_info = array_distinct($info)\n    $network_dns_questions_name = array_distinct($dns.network.dns.questions.name)\n    $network_dns_answers_data = array_distinct($dns.network.dns.answers.data)\n    // added to populate alert graph with additional context\n    $principal_ip = array_distinct($dns.principal.ip)\n    $target_ip = array_distinct($dns.target.ip)\n    $principal_process_pid = array_distinct($dns.principal.process.pid)\n    $principal_process_file_full_path = array_distinct($dns.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($dns.principal.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($dns.principal.user.userid)\n    $principal_process_command_line = array_distinct($dns.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($dns.principal.process.file.sha256)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($dns.principal.process.parent_process.product_specific_process_id)\n \n  condition:\n    $dns and $ioc\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Low"
+  },
+  "metadata": {
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
+    "data_source": "microsoft sysmon",
+    "priority": "Low",
+    "description": "Detect DNS events that communicate with gaming sites in MISP. These violate policy.",
+    "type": "alert",
+    "tags": "threat indicators"
+  },
+  "createTime": "2024-07-15T05:50:17.303439Z",
+  "revisionCreateTime": "2024-07-15T05:50:17.303439Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CJnx0rQGEJi52JAB",
+  "inputsUsed": {
+    "usesUdm": true,
+    "usesEntity": true
+  }
+}
