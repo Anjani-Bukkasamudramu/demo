@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_b6a24a5e-dbdb-412e-84ec-4d70962b603c",
+  "revisionId": "v_1716805572_351951000",
+  "displayName": "windows_event_log_cleared",
+  "text": "rule windows_event_log_cleared {\n \n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects the clearing of event logs within the Windows Event Viewer. \"\n    type = \"alert\"\n    data_source = \"microsoft sysmon, microsoft windows events\"\n    platform = \"Windows\"\n    mitre_attack_tactic = \"Defense Evasion\"\n    mitre_attack_technique = \"Indicator Removal: Clear Windows Event Logs\"\n    mitre_attack_url = \"https://attack.mitre.org/versions/v13/techniques/T1070/001/\"\n    mitre_attack_version = \"v13.1\"\n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    (\n        $process.metadata.event_type = \"PROCESS_LAUNCH\" and\n        // currently the command line is focused on the three primary log sets, could expand this further if desired\n        re.regex($process.target.process.command_line, `wevtutil.*cl.*(system|application|security)`) nocase\n    )\n    or\n    (\n        $process.metadata.event_type = \"SYSTEM_AUDIT_LOG_WIPE\" and\n        $process.metadata.vendor_name = \"Microsoft\"\n    )\n    or\n    (\n        $process.metadata.event_type = \"STATUS_UPDATE\" and\n        $process.metadata.product_name = \"PowerShell\" and\n        $process.metadata.vendor_name = \"Microsoft\" and\n        (    \n            re.regex($process.security_result.description, `Remove-EventLog`) nocase or\n            re.regex($process.security_result.description, `Clear-EventLog`) nocase\n        )\n    )\n    $process.principal.hostname = $hostname\n    \n  match:\n    $hostname over 5m\n    \n  outcome:\n    $risk_score = max(65)\n    $mitre_attack_tactic = \"Defense Evasion\"\n    $mitre_attack_technique = \"Indicator Removal: Clear Windows Event Logs\"\n    $mitre_attack_technique_id = \"T1070.001\"\n    $event_count = count_distinct($process.metadata.id)\n    $process_description = array_distinct($process.metadata.description)\n    // added to populate alert graph with additional context\n    // Commented out principal.hostname because it is already represented in graph as match variable. If match changes, can uncomment to add to results\n    //$principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)\n\n  condition:\n    $process\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "mitre_attack_version": "v13.1",
+    "type": "alert",
+    "platform": "Windows",
+    "mitre_attack_technique": "Indicator Removal: Clear Windows Event Logs",
+    "priority": "Medium",
+    "description": "Detects the clearing of event logs within the Windows Event Viewer. ",
+    "mitre_attack_tactic": "Defense Evasion",
+    "data_source": "microsoft sysmon, microsoft windows events",
+    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1070/001/"
+  },
+  "createTime": "2024-05-27T10:26:12.351951Z",
+  "revisionCreateTime": "2024-05-27T10:26:12.351951Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CMS/0bIGEJix6acB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
