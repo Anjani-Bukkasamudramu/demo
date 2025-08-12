@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_40698f77-c62f-47e5-a590-1493f00851f0",
+  "revisionId": "v_1716805378_524831000",
+  "displayName": "rw_mimikatz_T1003",
+  "text": "rule rw_mimikatz_T1003 {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Detects the process mimikatz being issued from the command line.\"\n    mitre_attack_tactic = \"Credential Access\"\n    mitre_attack_technique = \"OS Credential Dumping\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1003/\"\n    mitre_attack_version = \"v13.1\"\n    type = \"alert\"\n    platform = \"Windows\"\n    data_source = \"microsoft sysmon, microsoft windows events\"\n    severity = \"Critical\"\n    priority = \"High\"\n\n  events:\n    $process.metadata.event_type = \"PROCESS_LAUNCH\"\n    $process.metadata.event_type = $event_type\n    $process.target.process.command_line = /mimikatz/ nocase \n\n  match:\n    $event_type over 5m\n    \n  outcome:\n    $risk_score = max(95)\n    $mitre_attack_tactic = \"Credential Access\"\n    $mitre_attack_technique = \"OS Credential Dumping\"\n    $mitre_attack_technique_id = \"T1003\"\n    $event_count = count_distinct($process.metadata.id)\n    // added to populate alert graph with additional context\n    $principal_hostname = array_distinct($process.principal.hostname)\n    $principal_process_pid = array_distinct($process.principal.process.pid)\n    $principal_process_command_line = array_distinct($process.principal.process.command_line)\n    $principal_process_file_sha256 = array_distinct($process.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($process.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($process.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($process.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($process.target.process.pid)\n    $target_process_command_line = array_distinct($process.target.process.command_line)\n    $target_process_file_sha256 = array_distinct($process.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($process.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($process.target.process.product_specific_process_id)\n    $principal_user_userid = array_distinct($process.principal.user.userid)  \n    \n  condition:\n    $process\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Critical"
+  },
+  "metadata": {
+    "data_source": "microsoft sysmon, microsoft windows events",
+    "platform": "Windows",
+    "priority": "High",
+    "description": "Detects the process mimikatz being issued from the command line.",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/",
+    "mitre_attack_version": "v13.1",
+    "mitre_attack_tactic": "Credential Access",
+    "mitre_attack_technique": "OS Credential Dumping",
+    "type": "alert"
+  },
+  "createTime": "2024-05-27T10:22:58.524831Z",
+  "revisionCreateTime": "2024-05-27T10:22:58.524831Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CIK+0bIGEJiSofoB",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
