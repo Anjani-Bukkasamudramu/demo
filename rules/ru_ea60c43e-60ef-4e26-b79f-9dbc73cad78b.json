@@ -1,0 +1,100 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_ea60c43e-60ef-4e26-b79f-9dbc73cad78b",
+  "revisionId": "v_1716806179_394495000",
+  "displayName": "unexpected_connection_to_pci_environment",
+  "text": "rule unexpected_connection_to_pci_environment {\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"A successful low prevalence ssh connection from a non PCI environment to a PCI environment\"\n    assumption = \"A list called sensitive_labels has been created to match events labels of specific types\"\n    type = \"alert\"\n    data_source = \"corelight zeek\"\n    severity = \"Critical\"\n    priority = \"Critical\"\n\n  events:\n    $ssh.metadata.event_type = \"NETWORK_CONNECTION\"\n    $ssh.metadata.product_event_type = \"ssh\"\n    $ssh.security_result.action = \"ALLOW\"\n    //Does NOT match event label value to value in list - ie non-sensitive asset\n    not $ssh.principal.labels.value in %sensitive_labels\n    $ssh.principal.hostname = $source_host\n\n    //Connecting to a \"sensitive\" asset\n    $ssh.target.hostname = $dest_host\n    $ssh.target.hostname != /test/\n    //Match event label value to value in list - ie non-sensitive asset\n    $ssh.target.labels.value in %sensitive_labels\n\n  match:\n    $source_host, $dest_host over 24h\n\n  outcome:\n    $risk_score = sum(\n       if ($ssh.target.labels.value = \"PCI\", 40) +\n       if ($ssh.target.labels.value = \"ITAR\", 50) +\n       if ($ssh.target.labels.value = \"SuperSecretSauce\", 30) +\n       if ($ssh.target.labels.value = \"ArguablyTheMostSecretOfSauces\", 100)\n    )\n    //added to populate alert graph with additional context\n    $principal_hostname = array_distinct($ssh.principal.hostname )\n    $target_hostname = array_distinct($ssh.target.hostname )\n    $principal_process_pid = array_distinct($ssh.principal.process.pid)\n    $principal_process_command_line = array_distinct($ssh.principal.process.command_line)\n    $principal_process_file_md5 = array_distinct($ssh.principal.process.file.md5)\n    $principal_process_file_sha256 = array_distinct($ssh.principal.process.file.sha256)\n    $principal_process_file_full_path = array_distinct($ssh.principal.process.file.full_path)\n    $principal_process_product_specfic_process_id = array_distinct($ssh.principal.process.product_specific_process_id)\n    $principal_process_parent_process_product_specfic_process_id = array_distinct($ssh.principal.process.parent_process.product_specific_process_id)\n    $target_process_pid = array_distinct($ssh.target.process.pid)\n    $target_process_command_line = array_distinct($ssh.target.process.command_line)\n    $target_process_file_md5 = array_distinct($ssh.target.process.file.md5)\n    $target_process_file_sha256 = array_distinct($ssh.target.process.file.sha256)\n    $target_process_file_full_path = array_distinct($ssh.target.process.file.full_path)\n    $target_process_product_specfic_process_id = array_distinct($ssh.target.process.product_specific_process_id)\n    $target_process_parent_process_product_specfic_process_id = array_distinct($ssh.target.process.parent_process.product_specific_process_id)\n    $principal_user_userid = array_distinct($ssh.principal.user.userid)\n    $target_user_userid = array_distinct($ssh.target.user.userid)\n\n  condition:\n    // Then, trigger a detection if there are one or more of these connections.\n    $ssh and $risk_score > 39\n}\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Critical"
+  },
+  "metadata": {
+    "assumption": "A list called sensitive_labels has been created to match events labels of specific types",
+    "type": "alert",
+    "data_source": "corelight zeek",
+    "priority": "Critical",
+    "description": "A successful low prevalence ssh connection from a non PCI environment to a PCI environment"
+  },
+  "createTime": "2024-05-27T10:36:19.394495Z",
+  "revisionCreateTime": "2024-05-27T10:36:19.394495Z",
+  "compilationState": "SUCCEEDED",
+  "type": "MULTI_EVENT",
+  "referenceLists": [
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/sensitive_labels"
+  ],
+  "allowedRunFrequencies": [
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKPE0bIGEJiIjrwB",
+  "compilationDiagnostics": [
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 16,
+        "startColumn": 10,
+        "endLine": 16,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 23,
+        "startColumn": 6,
+        "endLine": 23,
+        "endColumn": 29
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 30,
+        "startColumn": 13,
+        "endLine": 30,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 31,
+        "startColumn": 13,
+        "endLine": 31,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 32,
+        "startColumn": 13,
+        "endLine": 32,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    },
+    {
+      "message": "labels field is deprecated and might not populate as expected.",
+      "position": {
+        "startLine": 33,
+        "startColumn": 13,
+        "endLine": 33,
+        "endColumn": 36
+      },
+      "severity": "WARNING",
+      "uri": "https://cloud.google.com/chronicle/docs/reference/udm-field-list"
+    }
+  ],
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
