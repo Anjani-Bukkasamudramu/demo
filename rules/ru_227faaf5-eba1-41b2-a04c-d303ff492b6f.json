@@ -1,0 +1,34 @@
+{
+  "name": "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/rules/ru_227faaf5-eba1-41b2-a04c-d303ff492b6f",
+  "revisionId": "v_1716806699_835183000",
+  "displayName": "o365_login_activity_to_azure_ad_powershell_app",
+  "text": "rule o365_login_activity_to_azure_ad_powershell_app {\n\n  meta:\n    author = \"Google Cloud Security\"\n    description = \"Logins to Azure AD PowerShell app can have legitimate purposes, but are also abused to gain access to user information. Programatic access to Entra ID (Azure AD) should generally be through apps, so reviewing these activities is needed.\"\n    mitre_attack_tactic = \"Initial Access\"\n    mitre_attack_technique = \"Valid Accounts: Cloud Accounts\"\n    mitre_attack_url = \"https://attack.mitre.org/techniques/T1078/004/\"\n    mitre_attack_version = \"v14.1\"\n    type = \"hunt\"\n    platform = \"azure\"\n    data_source = \"o365\"   \n    severity = \"Medium\"\n    priority = \"Medium\"\n\n  events:\n    $login.metadata.event_type = \"USER_LOGIN\"\n    $login.metadata.product_event_type = \"UserLoggedIn\"\n    $login.metadata.product_name = \"Office 365\"\n    $login.metadata.vendor_name = \"Microsoft\"\n    $login.target.resource.product_object_id = \"1b730954-1685-4b74-9bfd-dac224a7b894\"\n    $login.security_result.action = \"ALLOW\"\n    \n    // Below filters ADFS Sync Account that runs every 30 minutes between AD and Entra ID (for federated enrivonments); can use display name or email address\n    //$login.target.user.userid != \"insert your email address here\" and\n    //$login.target.user.user_display_name != \"On-Premises Directory Synchronization Service Account\"     \n\n    $login.target.user.userid = $userid\n\n  match:\n    $userid over 5m\n\n  outcome:\n    $risk_score = 65\n    $mitre_attack_tactic = \"Initial Access\"\n    $mitre_attack_technique = \"Valid Accounts: Cloud Accounts\"\n    $mitre_attack_technique_id = \"T1078.004\"\n    $event_count = count_distinct($login.metadata.id)\n    $security_summary = array_distinct($login.security_result.summary)\n    $user_agent = array_distinct($login.network.http.user_agent)\n    $country_region_login_attempt = array_distinct($login.principal.ip_geo_artifact.location.country_or_region)\n    //added to populate alert graph with additional context\n    $principal_ip = array_distinct($login.principal.ip)\n    //$target_user_email_addresses = array_distinct($login.target.user.email_addresses)\n    //$target_user_userid = array_distinct($login.target.user.userid)\n\n  condition:\n    $login\n}\n\n\n\n",
+  "author": "Google Cloud Security",
+  "severity": {
+    "displayName": "Medium"
+  },
+  "metadata": {
+    "mitre_attack_technique": "Valid Accounts: Cloud Accounts",
+    "data_source": "o365",
+    "mitre_attack_tactic": "Initial Access",
+    "platform": "azure",
+    "priority": "Medium",
+    "type": "hunt",
+    "description": "Logins to Azure AD PowerShell app can have legitimate purposes, but are also abused to gain access to user information. Programatic access to Entra ID (Azure AD) should generally be through apps, so reviewing these activities is needed.",
+    "mitre_attack_version": "v14.1",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1078/004/"
+  },
+  "createTime": "2024-05-27T10:44:59.835183Z",
+  "revisionCreateTime": "2024-05-27T10:44:59.835183Z",
+  "compilationState": "SUCCEEDED",
+  "type": "SINGLE_EVENT",
+  "allowedRunFrequencies": [
+    "LIVE",
+    "HOURLY",
+    "DAILY"
+  ],
+  "etag": "CKvI0bIGEJjDn44D",
+  "inputsUsed": {
+    "usesUdm": true
+  }
+}
