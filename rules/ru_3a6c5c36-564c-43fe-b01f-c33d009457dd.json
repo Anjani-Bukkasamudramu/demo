@@ -8,25 +8,25 @@
     "displayName": "High"
   },
   "metadata": {
-    "assumption": "Assumes lists for key servers and ntds suspicious processes have been created",
-    "mitre_attack_version": "v13.1",
     "tags": "list",
     "mitre_attack_tactic": "Credential Access",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/003/",
+    "mitre_attack_version": "v13.1",
+    "assumption": "Assumes lists for key servers and ntds suspicious processes have been created",
+    "platform": "Windows",
     "mitre_attack_technique": "OS Credenital Dumping: NTDS",
-    "priority": "High",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/003/",
     "data_source": "microsoft sysmon, microsoft windows events",
+    "priority": "High",
     "description": "Detects process launches from processes related to ntds against key servers",
-    "type": "alert",
-    "platform": "Windows"
+    "type": "alert"
   },
   "createTime": "2024-05-27T10:40:38.340607Z",
   "revisionCreateTime": "2024-05-27T10:40:38.340607Z",
   "compilationState": "SUCCEEDED",
   "type": "SINGLE_EVENT",
   "referenceLists": [
-    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/key_servers",
-    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/ntds_suspicious_processes"
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/ntds_suspicious_processes",
+    "projects/1017425675889/locations/europe-west3/instances/a099fd02-80fc-4a0f-a80c-fb5d7fe78564/referenceLists/key_servers"
   ],
   "allowedRunFrequencies": [
     "LIVE",
