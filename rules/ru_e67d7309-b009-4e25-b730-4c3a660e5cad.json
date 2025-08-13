@@ -9,14 +9,14 @@
   },
   "metadata": {
     "type": "alert",
-    "mitre_attack_version": "v13.1",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1570/",
-    "priority": "Info",
-    "description": "Command-line execution of the PsExec tool on Windows",
-    "mitre_attack_tactic": "Lateral Movement",
-    "data_source": "sentinelone",
     "platform": "Windows",
-    "mitre_attack_technique": "Lateral Tool Transfer"
+    "data_source": "sentinelone",
+    "mitre_attack_tactic": "Lateral Movement",
+    "description": "Command-line execution of the PsExec tool on Windows",
+    "mitre_attack_technique": "Lateral Tool Transfer",
+    "mitre_attack_version": "v13.1",
+    "priority": "Info"
   },
   "createTime": "2024-06-23T06:56:43.172207Z",
   "revisionCreateTime": "2024-06-23T06:56:43.172207Z",
