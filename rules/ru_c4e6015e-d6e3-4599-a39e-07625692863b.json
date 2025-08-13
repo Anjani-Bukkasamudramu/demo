@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "description": "Detect Multiple Failed Login Attempts followed by Successful Login",
     "data_source": "microsoft windows events",
+    "mitre_attack_tactic": "Credential Access",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1110/001/",
+    "priority": "Medium",
+    "mitre_attack_technique": "Brute Force: Password Guessing",
     "platform": "Windows",
     "mitre_attack_version": "v13.1",
     "type": "alert",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1110/001/",
-    "mitre_attack_technique": "Brute Force: Password Guessing",
-    "mitre_attack_tactic": "Credential Access",
-    "priority": "Medium"
+    "description": "Detect Multiple Failed Login Attempts followed by Successful Login"
   },
   "createTime": "2024-05-27T10:27:02.949343Z",
   "revisionCreateTime": "2024-05-27T10:27:02.949343Z",
