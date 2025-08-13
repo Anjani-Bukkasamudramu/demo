@@ -8,16 +8,16 @@
     "displayName": "Medium"
   },
   "metadata": {
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
+    "platform": "azure",
+    "mitre_attack_tactic": "Persistence",
     "type": "alert",
     "data_source": "o365",
-    "mitre_attack_version": "v14.1",
-    "platform": "azure",
     "description": "Adding users to administrative roles is not malicious, but due to the sensitivity of certain roles, validation should occur when this occurs",
-    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
-    "mitre_attack_tactic": "Persistence",
-    "priority": "Medium",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
-    "assumption": "The list msgraph_watchlist_roles is popualted with role names, example: Application Administrator"
+    "assumption": "The list msgraph_watchlist_roles is popualted with role names, example: Application Administrator",
+    "mitre_attack_version": "v14.1",
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:47:52.438751Z",
   "revisionCreateTime": "2024-05-27T10:47:52.438751Z",
