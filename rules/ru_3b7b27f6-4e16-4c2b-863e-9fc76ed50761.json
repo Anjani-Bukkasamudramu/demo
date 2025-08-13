@@ -8,12 +8,12 @@
     "displayName": "Critical"
   },
   "metadata": {
+    "priority": "Critical",
+    "description": "Identify default Lokibot C2 Traffic",
     "mitre_attack_tactic": "Command and Control",
     "mitre_attack_technique": "Application Layer Protocol: Web Protocols",
     "mitre_attach_url": "https://attack.mitre.org/techniques/T1071/001/",
-    "mitre_attack_version": "v13.1",
-    "priority": "Critical",
-    "description": "Identify default Lokibot C2 Traffic"
+    "mitre_attack_version": "v13.1"
   },
   "createTime": "2024-05-27T10:37:28.269695Z",
   "revisionCreateTime": "2024-05-27T10:37:28.269695Z",
