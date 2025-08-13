@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "mitre_attack_technique": "Valid Accounts: Cloud Accounts",
-    "data_source": "o365",
-    "mitre_attack_tactic": "Initial Access",
     "platform": "azure",
-    "priority": "Medium",
-    "type": "hunt",
     "description": "Logins to Azure AD PowerShell app can have legitimate purposes, but are also abused to gain access to user information. Programatic access to Entra ID (Azure AD) should generally be through apps, so reviewing these activities is needed.",
+    "priority": "Medium",
+    "mitre_attack_tactic": "Initial Access",
+    "type": "hunt",
     "mitre_attack_version": "v14.1",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1078/004/"
+    "mitre_attack_technique": "Valid Accounts: Cloud Accounts",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1078/004/",
+    "data_source": "o365"
   },
   "createTime": "2024-05-27T10:44:59.835183Z",
   "revisionCreateTime": "2024-05-27T10:44:59.835183Z",
