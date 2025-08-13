@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "description": "PowerShell_code_executed_directly_from_web",
     "type": "alert",
     "mitre_attack_tactic": "Execution",
-    "mitre_attack_technique": "Powershell"
+    "mitre_attack_technique": "Powershell",
+    "description": "PowerShell_code_executed_directly_from_web"
   },
   "createTime": "2024-12-05T07:21:22.197727Z",
   "revisionCreateTime": "2024-12-05T07:21:22.197727Z",
