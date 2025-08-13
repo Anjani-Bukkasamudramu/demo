@@ -8,11 +8,11 @@
     "displayName": "low"
   },
   "metadata": {
-    "tags": "whois",
     "data_source": "microsoft sysmon",
     "priority": "low",
     "description": "Provides example usage of WHOIS data, detecting a DNS query for a domain that contains a specific string and is not registered with the defined domain registrar.",
-    "type": "hunt"
+    "type": "hunt",
+    "tags": "whois"
   },
   "createTime": "2024-05-27T10:28:14.305103Z",
   "revisionCreateTime": "2024-05-27T10:28:14.305103Z",
