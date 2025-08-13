@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
+    "priority": "High",
+    "description": "Alert on downloading a known file hash from a known IP with VT Relationships.",
     "type": "alert",
     "tags": "vt",
-    "data_source": "zscalar, crowdstrike",
-    "priority": "High",
-    "description": "Alert on downloading a known file hash from a known IP with VT Relationships."
+    "data_source": "zscalar, crowdstrike"
   },
   "createTime": "2024-05-27T10:29:19.036175Z",
   "revisionCreateTime": "2024-05-27T10:29:19.036175Z",
