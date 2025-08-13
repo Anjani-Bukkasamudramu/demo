@@ -8,9 +8,9 @@
     "displayName": "High"
   },
   "metadata": {
-    "type": "alert",
     "description": "MICROSOFT_GRAPH_ALER",
-    "tag": "malware"
+    "tag": "malware",
+    "type": "alert"
   },
   "createTime": "2024-06-25T12:25:03.565695Z",
   "revisionCreateTime": "2024-06-25T12:25:03.565695Z",
