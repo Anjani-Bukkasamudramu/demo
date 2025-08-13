@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
+    "description": "Alert on known File Hash executing known File Hash with VT Relationships.",
+    "type": "alert",
     "tags": "vt",
     "data_source": "microsoft sysmon",
-    "priority": "High",
-    "description": "Alert on known File Hash executing known File Hash with VT Relationships.",
-    "type": "alert"
+    "priority": "High"
   },
   "createTime": "2024-05-27T10:28:49.841151Z",
   "revisionCreateTime": "2024-05-27T10:28:49.841151Z",
