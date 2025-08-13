@@ -8,9 +8,9 @@
     "displayName": "High"
   },
   "metadata": {
+    "type": "alert",
     "description": "Impossible Travel alert from Azure defender",
-    "tag": "malicious activity",
-    "type": "alert"
+    "tag": "malicious activity"
   },
   "createTime": "2024-07-26T07:13:51.465487Z",
   "revisionCreateTime": "2024-07-26T08:37:24.080399Z",
