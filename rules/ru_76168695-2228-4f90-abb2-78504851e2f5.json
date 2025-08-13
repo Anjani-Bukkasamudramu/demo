@@ -8,13 +8,13 @@
     "displayName": "High"
   },
   "metadata": {
-    "flag": "0xini1249",
-    "subtechnique": "SSH",
     "priority": "High",
-    "category": "Lateral Movement",
+    "flag": "0xini1249",
+    "confidence": "High",
     "technique": "Remote Services",
     "description": "Allowed low prevalence SSH connection between a sensitive and non-sensitive environment",
-    "confidence": "High"
+    "category": "Lateral Movement",
+    "subtechnique": "SSH"
   },
   "createTime": "2024-05-27T10:37:54.116367Z",
   "revisionCreateTime": "2024-05-27T10:37:54.116367Z",
