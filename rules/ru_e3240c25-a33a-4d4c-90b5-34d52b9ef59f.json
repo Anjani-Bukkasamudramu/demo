@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
+    "priority": "High",
+    "description": "Alert on known Hash contacting known IP with VT Relationships",
     "type": "alert",
     "tags": "vt",
-    "data_source": "microsoft defender atp",
-    "priority": "High",
-    "description": "Alert on known Hash contacting known IP with VT Relationships"
+    "data_source": "microsoft defender atp"
   },
   "createTime": "2024-05-27T10:29:41.717519Z",
   "revisionCreateTime": "2024-05-27T10:29:41.717519Z",
