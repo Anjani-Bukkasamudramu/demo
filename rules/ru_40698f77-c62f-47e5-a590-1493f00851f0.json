@@ -8,14 +8,14 @@
     "displayName": "Critical"
   },
   "metadata": {
-    "data_source": "microsoft sysmon, microsoft windows events",
-    "platform": "Windows",
-    "priority": "High",
-    "description": "Detects the process mimikatz being issued from the command line.",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/",
-    "mitre_attack_version": "v13.1",
-    "mitre_attack_tactic": "Credential Access",
     "mitre_attack_technique": "OS Credential Dumping",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1003/",
+    "mitre_attack_tactic": "Credential Access",
+    "platform": "Windows",
+    "data_source": "microsoft sysmon, microsoft windows events",
+    "mitre_attack_version": "v13.1",
+    "description": "Detects the process mimikatz being issued from the command line.",
+    "priority": "High",
     "type": "alert"
   },
   "createTime": "2024-05-27T10:22:58.524831Z",
