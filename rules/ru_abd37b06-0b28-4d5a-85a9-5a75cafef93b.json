@@ -8,8 +8,8 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "priority": "Medium",
-    "description": "SSH Bruteforce Detection"
+    "description": "SSH Bruteforce Detection",
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:39:08.589695Z",
   "revisionCreateTime": "2024-05-27T10:39:08.589695Z",
