@@ -7,9 +7,9 @@
     "displayName": "Low"
   },
   "metadata": {
+    "description": "A single IP address IP address had several failed authentication attempts within 5 minutes, to a single user ID for a single application before successfully logging in.",
     "tactic": "TA0010",
-    "rule_name": "Successful auth after brute force, by user ID",
-    "description": "A single IP address IP address had several failed authentication attempts within 5 minutes, to a single user ID for a single application before successfully logging in."
+    "rule_name": "Successful auth after brute force, by user ID"
   },
   "createTime": "2024-12-13T01:56:48.824255Z",
   "revisionCreateTime": "2024-12-13T01:56:48.824255Z",
