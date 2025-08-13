@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "mitre_attack_version": "v13.1",
+    "data_source": "microsoft sysmon, microsoft windows events",
+    "description": "Detects the clearing of event logs within the Windows Event Viewer. ",
+    "mitre_attack_technique": "Indicator Removal: Clear Windows Event Logs",
     "type": "alert",
     "platform": "Windows",
-    "mitre_attack_technique": "Indicator Removal: Clear Windows Event Logs",
-    "priority": "Medium",
-    "description": "Detects the clearing of event logs within the Windows Event Viewer. ",
     "mitre_attack_tactic": "Defense Evasion",
-    "data_source": "microsoft sysmon, microsoft windows events",
-    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1070/001/"
+    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1070/001/",
+    "mitre_attack_version": "v13.1",
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:26:12.351951Z",
   "revisionCreateTime": "2024-05-27T10:26:12.351951Z",
