@@ -10,13 +10,13 @@
   "metadata": {
     "mitre_attack_tactic": "Lateral Movement",
     "description": "Continual logins to Azure AD PowerShell app are not a security best practice, if this is observed, additional investigation is needed",
-    "type": "alert",
-    "platform": "azure",
     "mitre_attack_technique": "Remote Services: Cloud Services",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1021/007/",
+    "platform": "azure",
     "mitre_attack_version": "v14.1",
+    "type": "alert",
     "data_source": "o365",
-    "priority": "Medium",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1021/007/"
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:43:31.781535Z",
   "revisionCreateTime": "2024-05-27T10:43:31.781535Z",
