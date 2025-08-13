@@ -8,12 +8,12 @@
     "displayName": "Low"
   },
   "metadata": {
-    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
-    "data_source": "microsoft sysmon",
-    "priority": "Low",
     "description": "Detect DNS events that communicate with gaming sites in MISP. These violate policy.",
     "type": "alert",
-    "tags": "threat indicators"
+    "tags": "threat indicators",
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
+    "data_source": "microsoft sysmon",
+    "priority": "Low"
   },
   "createTime": "2024-07-15T05:50:17.303439Z",
   "revisionCreateTime": "2024-07-15T05:50:17.303439Z",
