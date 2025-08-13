@@ -8,12 +8,12 @@
     "displayName": "High"
   },
   "metadata": {
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
     "data_source": "microsoft sysmon",
     "priority": "High",
     "description": "Detect process/file events that match hashes found in our MISP instance and have low rolling max prevalence",
     "type": "alert",
-    "tags": "prevalence, threat indicators",
-    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators"
+    "tags": "prevalence, threat indicators"
   },
   "createTime": "2024-07-15T05:47:04.600255Z",
   "revisionCreateTime": "2024-07-15T05:47:04.600255Z",
