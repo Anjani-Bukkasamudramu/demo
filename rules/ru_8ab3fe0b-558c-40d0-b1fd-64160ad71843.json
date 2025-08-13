@@ -8,8 +8,8 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "log_source": "Google Workspace",
-    "description": "Google detected a download of data that looks to be malware"
+    "description": "Google detected a download of data that looks to be malware",
+    "log_source": "Google Workspace"
   },
   "createTime": "2024-10-17T21:28:59.301935Z",
   "revisionCreateTime": "2024-10-17T21:28:59.301935Z",
