@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
-    "description": "Use Google Cloud Threat Intel hash intelligence to scan for malicious process launch activity",
-    "type": "alert",
     "tags": "vt, gcti",
     "data_source": "all",
-    "priority": "High"
+    "priority": "High",
+    "description": "Use Google Cloud Threat Intel hash intelligence to scan for malicious process launch activity",
+    "type": "alert"
   },
   "createTime": "2024-05-27T10:22:31.122479Z",
   "revisionCreateTime": "2024-05-27T10:22:31.122479Z",
