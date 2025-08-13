@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
-    "data_source": "crowdstrike",
-    "priority": "High",
     "description": "Identify process creations that are tagged exploit in VT",
     "type": "alert",
-    "tags": "vt enrichment"
+    "tags": "vt enrichment",
+    "data_source": "crowdstrike",
+    "priority": "High"
   },
   "createTime": "2024-07-15T06:41:10.844415Z",
   "revisionCreateTime": "2024-07-15T06:41:10.844415Z",
