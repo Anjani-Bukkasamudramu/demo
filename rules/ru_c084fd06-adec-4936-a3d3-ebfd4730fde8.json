@@ -8,11 +8,11 @@
     "displayName": "Low"
   },
   "metadata": {
+    "priority": "Low",
+    "description": "Detects creation and movement of .lnk files to specific folders",
     "type": "alert",
     "data_source": "microsoft sysmon",
-    "platform": "Windows",
-    "priority": "Low",
-    "description": "Detects creation and movement of .lnk files to specific folders"
+    "platform": "Windows"
   },
   "createTime": "2024-05-27T10:37:41.163999Z",
   "revisionCreateTime": "2024-05-27T10:37:41.163999Z",
