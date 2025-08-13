@@ -8,15 +8,15 @@
     "displayName": "Critical"
   },
   "metadata": {
-    "data_source": "microsoft defender atp",
-    "description": "Alert on known Hash contacting Tor IP with VT Relationships.",
-    "mitre_attach_url": "https://attack.mitre.org/techniques/T1090/003/",
-    "tags": "vt, tor",
+    "mitre_attack_version": "v13.1",
     "priority": "High",
-    "type": "alert",
     "mitre_attack_technique": "Proxy: Multi-hop Proxy",
+    "type": "alert",
     "mitre_attack_tactic": "Command and Control",
-    "mitre_attack_version": "v13.1"
+    "tags": "vt, tor",
+    "mitre_attach_url": "https://attack.mitre.org/techniques/T1090/003/",
+    "description": "Alert on known Hash contacting Tor IP with VT Relationships.",
+    "data_source": "microsoft defender atp"
   },
   "createTime": "2024-05-27T10:29:31.381007Z",
   "revisionCreateTime": "2024-05-27T10:29:31.381007Z",
