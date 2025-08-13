@@ -8,12 +8,12 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "type": "alert",
-    "tags": "threat indicators, vt enrichment",
     "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
     "data_source": "microsoft sysmon",
     "priority": "Medium",
-    "description": "Detect file/process events with watchlisted hashes from MISP that VT flagged as MS Office docx file types"
+    "description": "Detect file/process events with watchlisted hashes from MISP that VT flagged as MS Office docx file types",
+    "type": "alert",
+    "tags": "threat indicators, vt enrichment"
   },
   "createTime": "2024-07-15T05:47:46.523215Z",
   "revisionCreateTime": "2024-07-15T05:47:46.523215Z",
