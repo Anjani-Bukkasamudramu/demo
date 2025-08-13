@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
+    "type": "alert",
     "mitre_attack_tactic": "Credential Access",
     "mitre_attack_technique": "Insecure Credentials",
-    "description": "Insecure_Or_Clear_Text_Authentication_Detected",
-    "type": "alert"
+    "description": "Insecure_Or_Clear_Text_Authentication_Detected"
   },
   "createTime": "2024-12-05T05:07:50.409551Z",
   "revisionCreateTime": "2024-12-05T05:07:50.409551Z",
