@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "data_source": "microsoft windows events",
+    "priority": "Medium",
+    "description": "Detect repeated authentication failure with multiple users indicative of a password spray attack.",
+    "mitre_attack_technique": "Brute Force: Password Spraying",
     "platform": "Windows",
+    "data_source": "microsoft windows events",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1110/003/",
     "mitre_attack_version": "v13.1",
-    "mitre_attack_tactic": "Credential Access",
-    "priority": "Medium",
     "type": "alert",
-    "description": "Detect repeated authentication failure with multiple users indicative of a password spray attack.",
-    "mitre_attack_technique": "Brute Force: Password Spraying"
+    "mitre_attack_tactic": "Credential Access"
   },
   "createTime": "2024-06-23T06:58:23.482927Z",
   "revisionCreateTime": "2024-06-23T06:58:23.482927Z",
