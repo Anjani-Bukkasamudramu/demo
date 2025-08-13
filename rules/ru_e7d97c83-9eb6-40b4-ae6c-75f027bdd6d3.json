@@ -8,17 +8,17 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "priority": "Medium",
-    "description": "Detect Multiple Failed Login Attempts followed by Successful Login",
+    "mitre_attack_version": "v13.1",
+    "type": "alert",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1110/001/",
     "mitre_attack_technique": "Brute Force: Password Guessing",
-    "type": "alert",
-    "mitre_attack_tactic": "Credential Access",
-    "mitre_attack_version": "v13.1",
+    "description": "Detect Multiple Failed Login Attempts followed by Successful Login",
     "assumption": "Assumes ingestion of Windows users and assets to entity graph to entity graph",
     "data_source": "microsoft windows events",
     "platform": "Windows",
-    "tags": "user entity, asset entity"
+    "mitre_attack_tactic": "Credential Access",
+    "tags": "user entity, asset entity",
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:26:40.693695Z",
   "revisionCreateTime": "2024-05-27T10:26:40.693695Z",
