@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "type": "alert",
     "mitre_attack_tactic": "Defense Evasion",
     "mitre_attack_technique": "File Deletion",
-    "description": "Audit_Log_Cleared"
+    "description": "Audit_Log_Cleared",
+    "type": "alert"
   },
   "createTime": "2024-12-04T16:01:57.841135Z",
   "revisionCreateTime": "2024-12-04T16:15:05.982191Z",
