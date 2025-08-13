@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "type": "alert",
     "mitre_attack_tactic": "Privilege escalation",
     "mitre_attack_technique": "Valid Accounts",
-    "description": "Kerberos_Encryption_Downgrade"
+    "description": "Kerberos_Encryption_Downgrade",
+    "type": "alert"
   },
   "createTime": "2024-12-03T07:10:54.719119Z",
   "revisionCreateTime": "2024-12-03T07:24:05.535199Z",
