@@ -8,13 +8,13 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "type": "alert",
-    "platform": "azure",
-    "data_source": "o365",
-    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
     "description": "Alerts when a permission on the watchlist is applied to an Entra ID application.",
+    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
     "assumption": "The list msgraph_watchlist_permissions is populated as needed with guid permissions Example: 024d486e-b451-40bb-833d-3e66d98c5c73 //Mail.Read.Write",
-    "priority": "Medium"
+    "type": "alert",
+    "data_source": "o365",
+    "priority": "Medium",
+    "platform": "azure"
   },
   "createTime": "2024-05-27T10:46:34.383583Z",
   "revisionCreateTime": "2024-05-27T10:46:34.383583Z",
