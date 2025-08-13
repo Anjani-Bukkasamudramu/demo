@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "description": "Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts",
-    "type": "alert",
     "mitre_attack_tactic": "Credential Access",
-    "mitre_attack_technique": "Brute force"
+    "mitre_attack_technique": "Brute force",
+    "description": "Potential_Brute_Force_Attempt_Excessive_User_Account_Lockouts",
+    "type": "alert"
   },
   "createTime": "2024-12-05T05:02:42.887999Z",
   "revisionCreateTime": "2024-12-05T05:02:42.887999Z",
