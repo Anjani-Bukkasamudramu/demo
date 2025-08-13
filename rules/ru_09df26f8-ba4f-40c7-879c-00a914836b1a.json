@@ -8,11 +8,11 @@
     "displayName": "Medium"
   },
   "metadata": {
+    "type": "alert",
     "tags": "safe browsing, first last seen",
     "data_source": "microsoft sysmon, crowdstrike",
     "priority": "Medium",
-    "description": "Identify process and file creation using safe browsing hashes where the first and last seen are more than 7 days apart",
-    "type": "alert"
+    "description": "Identify process and file creation using safe browsing hashes where the first and last seen are more than 7 days apart"
   },
   "createTime": "2024-05-27T10:39:22.171791Z",
   "revisionCreateTime": "2024-05-27T10:39:22.171791Z",
