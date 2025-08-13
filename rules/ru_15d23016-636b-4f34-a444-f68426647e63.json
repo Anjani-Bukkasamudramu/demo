@@ -8,8 +8,8 @@
     "displayName": "HIGH"
   },
   "metadata": {
-    "description": "Alert matching on high confidence and confirmed CVEs from Attack Surface Management (ASM)",
-    "data_source": "Mandiant Attack Surface Management"
+    "data_source": "Mandiant Attack Surface Management",
+    "description": "Alert matching on high confidence and confirmed CVEs from Attack Surface Management (ASM)"
   },
   "createTime": "2024-10-17T21:29:00.024639Z",
   "revisionCreateTime": "2024-10-17T21:29:00.024639Z",
