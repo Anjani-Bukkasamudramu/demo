@@ -8,11 +8,11 @@
     "displayName": "Info"
   },
   "metadata": {
-    "priority": "Info",
-    "description": "Detects access attempts to a newly created domain via WHOIS enrichment.",
     "type": "alert",
     "tags": "whois",
-    "data_source": "zscalar"
+    "data_source": "zscalar",
+    "priority": "Info",
+    "description": "Detects access attempts to a newly created domain via WHOIS enrichment."
   },
   "createTime": "2024-05-27T10:27:17.975087Z",
   "revisionCreateTime": "2024-05-27T10:27:17.975087Z",
