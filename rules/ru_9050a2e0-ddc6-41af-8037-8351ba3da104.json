@@ -8,16 +8,16 @@
     "displayName": "Info"
   },
   "metadata": {
-    "mitre_attack_version": "v13.1",
-    "platform": "Windows",
-    "description": "Detects the use of powershell to enumerate successful logins on a specific host",
-    "type": "hunt",
-    "priority": "Info",
-    "mitre_attack_technique": "System Owner/User Discovery",
     "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1033/",
-    "reference": "https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF",
+    "description": "Detects the use of powershell to enumerate successful logins on a specific host",
+    "mitre_attack_technique": "System Owner/User Discovery",
+    "mitre_attack_version": "v13.1",
+    "data_source": "microsoft sysmon",
+    "priority": "Info",
+    "type": "hunt",
     "mitre_attack_tactic": "Discovery",
-    "data_source": "microsoft sysmon"
+    "platform": "Windows",
+    "reference": "https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF"
   },
   "createTime": "2024-05-27T10:42:03.349631Z",
   "revisionCreateTime": "2024-05-27T10:42:03.349631Z",
