@@ -8,16 +8,16 @@
     "displayName": "Low"
   },
   "metadata": {
-    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1082/",
-    "mitre_attack_technique": "System Information Discovery",
-    "mitre_attack_version": "v13.1",
     "type": "hunt",
-    "data_source": "microsoft sysmon, windows event logs",
-    "priority": "Low",
     "description": "Detects system enumeration events as identified in CISA Living of the Land pdf. Alone they may be normal but in concert, they may be worth looking into",
     "mitre_attack_tactic": "Discovery",
+    "mitre_attack_technique": "System Information Discovery",
+    "platform": "Windows",
+    "data_source": "microsoft sysmon, windows event logs",
+    "mitre_attack_version": "v13.1",
+    "mitre_attack_url": "https://attack.mitre.org/versions/v13/techniques/T1082/",
     "reference": "https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF",
-    "platform": "Windows"
+    "priority": "Low"
   },
   "createTime": "2024-05-27T10:42:17.105215Z",
   "revisionCreateTime": "2024-05-27T10:42:17.105215Z",
