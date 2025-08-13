@@ -8,15 +8,15 @@
     "displayName": "Info"
   },
   "metadata": {
-    "type": "hunt",
-    "priority": "Info",
     "mitre_attack_tactic": "Defense Evasion",
-    "mitre_attack_technique": "Deobfuscate/Decode Files or Information",
-    "mitre_attack_version": "v13.1",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1140/",
+    "mitre_attack_technique": "Deobfuscate/Decode Files or Information",
+    "description": "Detects encoded powershell commands",
+    "mitre_attack_version": "v13.1",
+    "type": "hunt",
     "platform": "Windows",
     "data_source": "microsoft sysmon, microsoft windows events",
-    "description": "Detects encoded powershell commands"
+    "priority": "Info"
   },
   "createTime": "2024-06-23T06:56:11.363983Z",
   "revisionCreateTime": "2024-06-23T06:56:11.363983Z",
