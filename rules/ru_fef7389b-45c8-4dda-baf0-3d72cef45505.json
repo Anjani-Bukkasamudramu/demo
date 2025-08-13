@@ -7,10 +7,10 @@
     "displayName": "Low"
   },
   "metadata": {
+    "rule_name": "First Time Interactive Service Account Login by Principal User ID and Target Service Account",
     "description": "Detects the first time a user has a successful interactive service account login, tracked by principal user ID and target service account in the last 30 days. This may be indicative of behavior related to entry vectors.",
     "tactic": "TA0001",
-    "technique": "T1113",
-    "rule_name": "First Time Interactive Service Account Login by Principal User ID and Target Service Account"
+    "technique": "T1113"
   },
   "createTime": "2024-12-13T02:28:41.664607Z",
   "revisionCreateTime": "2024-12-13T02:28:41.664607Z",
