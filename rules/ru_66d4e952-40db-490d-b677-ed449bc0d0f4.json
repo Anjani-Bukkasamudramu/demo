@@ -8,14 +8,14 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "mitre_attack_tactic": "Exfiltration",
-    "description": "Anonymous links can be used to export files from OneDrive. While this isn't always a sign of malicious activity, some organizations do not support the use of anonymous links because of the risk of data leakage. This rule detects when anonymous links are used to download files from OneDrive.",
-    "mitre_attack_technique": "Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
-    "mitre_attack_version": "v14.1",
-    "platform": "azure",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1048/002/",
-    "data_source": "o365",
     "priority": "Medium",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1048/002/",
+    "mitre_attack_technique": "Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
+    "platform": "azure",
+    "data_source": "o365",
+    "mitre_attack_tactic": "Exfiltration",
+    "mitre_attack_version": "v14.1",
+    "description": "Anonymous links can be used to export files from OneDrive. While this isn't always a sign of malicious activity, some organizations do not support the use of anonymous links because of the risk of data leakage. This rule detects when anonymous links are used to download files from OneDrive.",
     "type": "hunt"
   },
   "createTime": "2024-05-27T10:44:09.605775Z",
