@@ -8,12 +8,12 @@
     "displayName": "High"
   },
   "metadata": {
+    "priority": "High",
     "description": "Detects when a series of events occur that align with the ursnif/ldr4 malware",
     "reference": "https://thedfirreport.com/2023/01/09/unwrapping-ursnifs-gifts/",
     "platform": "Windows",
     "type": "alert",
-    "data_source": "crowdstrike",
-    "priority": "High"
+    "data_source": "crowdstrike"
   },
   "createTime": "2024-05-27T10:34:57.149951Z",
   "revisionCreateTime": "2024-05-27T10:34:57.149951Z",
