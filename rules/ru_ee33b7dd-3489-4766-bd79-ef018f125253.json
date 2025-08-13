@@ -8,16 +8,16 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "assumption": "The list msgraph_watchlist_roles is popualted with role names, ie Application Administrator",
-    "type": "alert",
-    "mitre_attack_version": "v14.1",
     "priority": "Medium",
-    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
     "platform": "azure",
-    "data_source": "o365",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/003/",
+    "type": "alert",
     "description": "Detects when a user is created in Entra ID and assigned roles within a defined time window.",
-    "mitre_attack_tactic": "Persistence"
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Roles",
+    "assumption": "The list msgraph_watchlist_roles is popualted with role names, ie Application Administrator",
+    "mitre_attack_tactic": "Persistence",
+    "data_source": "o365",
+    "mitre_attack_version": "v14.1"
   },
   "createTime": "2024-05-27T10:43:20.912527Z",
   "revisionCreateTime": "2024-05-27T10:43:20.912527Z",
