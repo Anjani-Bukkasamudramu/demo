@@ -8,9 +8,9 @@
     "displayName": "High"
   },
   "metadata": {
+    "mitre_attack_tactic": "Initial access",
     "description": "Suspicious powershell command execution",
-    "type": "alert",
-    "mitre_attack_tactic": "Initial access"
+    "type": "alert"
   },
   "createTime": "2024-11-25T11:22:53.640783Z",
   "revisionCreateTime": "2024-11-29T07:21:16.530927Z",
