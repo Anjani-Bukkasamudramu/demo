@@ -8,12 +8,12 @@
     "displayName": "Low"
   },
   "metadata": {
-    "tags": "whois",
-    "data_source": "zscalar, microsoft sysmon",
     "platform": "Windows",
     "priority": "Low",
     "description": "Detect web traffic to a recently expired domain followed by an exe file creation event",
-    "type": "alert"
+    "type": "alert",
+    "tags": "whois",
+    "data_source": "zscalar, microsoft sysmon"
   },
   "createTime": "2024-05-27T10:27:30.183199Z",
   "revisionCreateTime": "2024-05-27T10:27:30.183199Z",
