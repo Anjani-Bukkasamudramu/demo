@@ -8,11 +8,11 @@
     "displayName": "Critical"
   },
   "metadata": {
-    "assumption": "A list called sensitive_labels has been created to match events labels of specific types",
     "type": "alert",
     "data_source": "corelight zeek",
     "priority": "Critical",
-    "description": "A successful low prevalence ssh connection from a non PCI environment to a PCI environment"
+    "description": "A successful low prevalence ssh connection from a non PCI environment to a PCI environment",
+    "assumption": "A list called sensitive_labels has been created to match events labels of specific types"
   },
   "createTime": "2024-05-27T10:36:19.394495Z",
   "revisionCreateTime": "2024-05-27T10:36:19.394495Z",
