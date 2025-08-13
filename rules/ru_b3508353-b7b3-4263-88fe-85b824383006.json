@@ -8,9 +8,9 @@
     "displayName": "High"
   },
   "metadata": {
+    "description": "Possible_Rogue_storage_device",
     "type": "alert",
-    "mitre_attack_tactic": "Initial access",
-    "description": "Possible_Rogue_storage_device"
+    "mitre_attack_tactic": "Initial access"
   },
   "createTime": "2024-11-27T07:48:16.481183Z",
   "revisionCreateTime": "2024-11-27T08:05:48.802591Z",
