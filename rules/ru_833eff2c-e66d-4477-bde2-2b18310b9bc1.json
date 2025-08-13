@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "description": "Secrets added to applications have legitimate purposes, but can also be a method of persistence. This alert will trigger on creation, modification or delete of a client secret",
-    "platform": "azure",
-    "data_source": "o365",
-    "mitre_attack_tactic": "Persistence",
-    "mitre_attack_technique": "Account Manipulation: Additional Cloud Credentials",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/001/",
     "type": "alert",
     "priority": "Medium",
-    "mitre_attack_version": "v14.1"
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/001/",
+    "platform": "azure",
+    "description": "Secrets added to applications have legitimate purposes, but can also be a method of persistence. This alert will trigger on creation, modification or delete of a client secret",
+    "mitre_attack_technique": "Account Manipulation: Additional Cloud Credentials",
+    "mitre_attack_version": "v14.1",
+    "data_source": "o365",
+    "mitre_attack_tactic": "Persistence"
   },
   "createTime": "2024-05-27T10:45:12.301263Z",
   "revisionCreateTime": "2024-05-27T10:45:12.301263Z",
