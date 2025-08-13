@@ -8,15 +8,15 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "data_source": "o365",
     "priority": "Medium",
-    "mitre_attack_tactic": "Exfiltration",
-    "mitre_attack_version": "v14.1",
-    "platform": "azure",
     "description": "Anonymous links can be used to access files from OneDrive. While this isn't always a sign of malicious activity, some organizations do not support the use of anonymous links because of the risk of data leakage. This rule detects when anonymous links are used to access files from OneDrive.",
     "mitre_attack_technique": "Exfiltration Over Alternative Protocol: Exfiltration Over Asymmetric Encrypted Non-C2 Protocol",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1048/002/",
-    "type": "hunt"
+    "type": "hunt",
+    "mitre_attack_version": "v14.1",
+    "platform": "azure",
+    "mitre_attack_tactic": "Exfiltration",
+    "data_source": "o365"
   },
   "createTime": "2024-05-27T10:43:58.263519Z",
   "revisionCreateTime": "2024-05-27T10:43:58.263519Z",
