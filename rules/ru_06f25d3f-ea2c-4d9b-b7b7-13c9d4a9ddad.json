@@ -8,12 +8,12 @@
     "displayName": "Medium"
   },
   "metadata": {
+    "data_source": "microsoft windows events",
+    "priority": "Medium",
     "description": "Detect network events that indicate communication to a watchlisted IP address",
     "type": "alert",
     "tags": "threat indicators",
-    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
-    "data_source": "microsoft windows events",
-    "priority": "Medium"
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators"
   },
   "createTime": "2024-07-15T05:49:26.109679Z",
   "revisionCreateTime": "2024-07-15T05:49:26.109679Z",
