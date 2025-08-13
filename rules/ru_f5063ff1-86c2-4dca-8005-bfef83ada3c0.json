@@ -8,11 +8,11 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "type": "alert",
-    "platform": "windows",
     "data_source": "microsoft windows events",
     "priority": "Medium",
-    "description": "Detects the creation, login, and deletion of a user account over a predefined timeframe"
+    "description": "Detects the creation, login, and deletion of a user account over a predefined timeframe",
+    "type": "alert",
+    "platform": "windows"
   },
   "createTime": "2024-05-27T10:26:23.358175Z",
   "revisionCreateTime": "2024-05-27T10:26:23.358175Z",
