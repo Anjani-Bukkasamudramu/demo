@@ -8,9 +8,9 @@
     "displayName": "Medium"
   },
   "metadata": {
+    "attack_tactic": "credential access",
     "attack_technique": "os credential dumping",
-    "attack_link": "https://attack.mitre.org/techniques/T1003/",
-    "attack_tactic": "credential access"
+    "attack_link": "https://attack.mitre.org/techniques/T1003/"
   },
   "createTime": "2024-05-27T10:24:31.885103Z",
   "revisionCreateTime": "2024-05-27T10:24:31.885103Z",
