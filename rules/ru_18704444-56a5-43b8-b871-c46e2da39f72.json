@@ -8,16 +8,16 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "priority": "Medium",
     "mitre_attack_version": "v14.1",
-    "description": "Once a user authenticates to the Azure AD PowerShell application, if they take multiple admin actions indicative of establishing their own persistence with an Entra ID application within a portion of the access token time, alert for additional investigation",
-    "assumption": "This does not take into account attempts that were blocked, just any logging of attempts for any of these actions",
     "mitre_attack_tactic": "Persistence",
-    "data_source": "o365",
     "mitre_attack_url": "https://attack.mitre.org/techniques/T1098/001/",
     "type": "alert",
+    "description": "Once a user authenticates to the Azure AD PowerShell application, if they take multiple admin actions indicative of establishing their own persistence with an Entra ID application within a portion of the access token time, alert for additional investigation",
     "mitre_attack_technique": "Account Manipulation: Additional Cloud Credentials",
-    "platform": "azure"
+    "platform": "azure",
+    "data_source": "o365",
+    "priority": "Medium",
+    "assumption": "This does not take into account attempts that were blocked, just any logging of attempts for any of these actions"
   },
   "createTime": "2024-05-27T10:48:06.149903Z",
   "revisionCreateTime": "2024-05-27T10:48:06.149903Z",
