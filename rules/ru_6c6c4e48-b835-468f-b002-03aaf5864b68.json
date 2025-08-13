@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "mitre_attack_technique": "Valid accounts",
-    "description": "Default_Admin_account_Credential_Exposure",
     "type": "alert",
-    "mitre_attack_tactic": "Privilege escalation"
+    "mitre_attack_tactic": "Privilege escalation",
+    "mitre_attack_technique": "Valid accounts",
+    "description": "Default_Admin_account_Credential_Exposure"
   },
   "createTime": "2024-11-29T06:56:16.076783Z",
   "revisionCreateTime": "2024-11-29T07:17:25.463983Z",
