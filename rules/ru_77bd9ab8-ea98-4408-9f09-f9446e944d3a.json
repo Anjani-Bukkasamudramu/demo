@@ -8,12 +8,12 @@
     "displayName": "Low"
   },
   "metadata": {
+    "type": "hunt",
+    "platform": "Windows",
     "data_source": "microsoft sysmon, microsft windows events",
     "reference": "https://media.defense.gov/2023/May/24/2003229517/-1/-1/0/CSA_Living_off_the_Land.PDF",
     "priority": "Low",
-    "description": "Detects suspicious commands as identified in CISA Living of the Land pdf. Alone they may be normal but in concert, they may be worth looking into",
-    "type": "hunt",
-    "platform": "Windows"
+    "description": "Detects suspicious commands as identified in CISA Living of the Land pdf. Alone they may be normal but in concert, they may be worth looking into"
   },
   "createTime": "2024-05-27T10:41:42.421439Z",
   "revisionCreateTime": "2024-05-27T10:41:42.421439Z",
