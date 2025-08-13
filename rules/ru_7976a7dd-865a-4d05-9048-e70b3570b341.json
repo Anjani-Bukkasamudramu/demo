@@ -8,17 +8,17 @@
     "displayName": "High"
   },
   "metadata": {
-    "data_source": "zscaler nss, crowdstrike",
-    "mitre_attack_tactic": "Execution",
-    "type": "alert",
-    "description": "Executable downloaded by Microsoft Excel by user with GCP entity relationship",
-    "mitre_attack_url": "https://attack.mitre.org/techniques/T1204/002/",
-    "mitre_attack_version": "v13.1",
-    "assumption": "This rule assumes that GCP DLP has been deployed and resources have been assigned to a user context",
     "priority": "High",
-    "mitre_attack_technique": "User Execution: Malicious File",
+    "mitre_attack_version": "v13.1",
+    "description": "Executable downloaded by Microsoft Excel by user with GCP entity relationship",
+    "assumption": "This rule assumes that GCP DLP has been deployed and resources have been assigned to a user context",
+    "mitre_attack_url": "https://attack.mitre.org/techniques/T1204/002/",
+    "data_source": "zscaler nss, crowdstrike",
+    "tags": "user entity, resource entity",
     "platform": "Windows",
-    "tags": "user entity, resource entity"
+    "mitre_attack_technique": "User Execution: Malicious File",
+    "type": "alert",
+    "mitre_attack_tactic": "Execution"
   },
   "createTime": "2024-10-17T21:28:59.849983Z",
   "revisionCreateTime": "2025-03-17T23:03:38.068943Z",
