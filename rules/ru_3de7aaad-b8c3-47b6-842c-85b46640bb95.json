@@ -8,12 +8,12 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
     "data_source": "microsoft sysmon",
     "priority": "Medium",
     "description": "Detect file/process events that match watchlisted hashes in MISP",
     "type": "alert",
-    "tags": "threat indicators"
+    "tags": "threat indicators",
+    "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators"
   },
   "createTime": "2024-07-15T05:48:23.971071Z",
   "revisionCreateTime": "2024-07-15T05:48:23.971071Z",
