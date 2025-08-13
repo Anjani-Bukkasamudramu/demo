@@ -5,13 +5,13 @@
   "text": "rule suspicious_psexec_execution {\n meta:\n    author = \"Samir Bousseaden\"\n    description = \"detects execution of psexec or paexec with renamed service name, this rule helps to filter out the noise if psexec is used for legit purposes or if attacker uses a different psexec client other than sysinternal one  License: https://github.com/Neo23x0/sigma/blob/master/LICENSE.Detection.Rules.md.\"\n    reference = \"https://tdm.socprime.com/tdm/info/yTfFXsOGHAF5\"\n    version = \"0.01\"\n    created = \"2021-03-09\"\n    product = \"windows\"\n    service = \"security\"\n    mitre = \"lateral_movement, t1077\"\n\n  events:\n(($selection1.metadata.product_event_type = \"5145\" and re.regex($selection1.target.resource.name, `.*\\\\IPC$`) and (re.regex($selection1.target.file.full_path, `.*-stdin`) or re.regex($selection1.target.file.full_path, `.*-stdout`) or re.regex($selection1.target.file.full_path, `.*-stderr`))) and not ($selection1.metadata.product_event_type = \"5145\" and re.regex($selection1.target.resource.name, `.*\\\\IPC$`) and re.regex($selection1.target.file.full_path, `PSEXESVC.*`)))\n\n  condition:\n    $selection1\n}\n",
   "author": "Samir Bousseaden",
   "metadata": {
-    "product": "windows",
-    "service": "security",
     "mitre": "lateral_movement, t1077",
     "description": "detects execution of psexec or paexec with renamed service name, this rule helps to filter out the noise if psexec is used for legit purposes or if attacker uses a different psexec client other than sysinternal one  License: https://github.com/Neo23x0/sigma/blob/master/LICENSE.Detection.Rules.md.",
     "reference": "https://tdm.socprime.com/tdm/info/yTfFXsOGHAF5",
     "version": "0.01",
-    "created": "2021-03-09"
+    "created": "2021-03-09",
+    "product": "windows",
+    "service": "security"
   },
   "createTime": "2024-06-25T11:09:32.283311Z",
   "revisionCreateTime": "2024-06-25T11:09:32.283311Z",
