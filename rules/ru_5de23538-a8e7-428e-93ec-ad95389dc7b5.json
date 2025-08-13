@@ -8,10 +8,10 @@
     "displayName": "High"
   },
   "metadata": {
-    "description": "Local_authentication_Detected",
     "type": "alert",
     "mitre_attack_tactic": "Initial access",
-    "mitre_attack_technique": "valid accounts"
+    "mitre_attack_technique": "valid accounts",
+    "description": "Local_authentication_Detected"
   },
   "createTime": "2024-11-25T13:54:00.637455Z",
   "revisionCreateTime": "2024-11-29T07:33:57.403695Z",
