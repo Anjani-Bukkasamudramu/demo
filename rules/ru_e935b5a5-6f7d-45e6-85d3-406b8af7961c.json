@@ -8,11 +8,11 @@
     "displayName": "High"
   },
   "metadata": {
+    "priority": "High",
+    "description": "Alert on known Hash querying a known hostname with VT Relationships",
     "type": "alert",
     "tags": "vt",
-    "data_source": "microsoft sysmon, crowdstrike",
-    "priority": "High",
-    "description": "Alert on known Hash querying a known hostname with VT Relationships"
+    "data_source": "microsoft sysmon, crowdstrike"
   },
   "createTime": "2024-05-27T10:30:05.106031Z",
   "revisionCreateTime": "2024-05-27T10:30:05.106031Z",
