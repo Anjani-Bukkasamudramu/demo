@@ -8,12 +8,12 @@
     "displayName": "High"
   },
   "metadata": {
-    "description": "Detect DNS events that indicate communication to a C2 domain in MISP",
-    "type": "alert",
     "tags": "threat indicators",
     "assumption": "Assumes MISP data has been ingested into entity graph; this rule can be modified to utilize other TI indicators",
     "data_source": "microsoft sysmon",
-    "priority": "High"
+    "priority": "High",
+    "description": "Detect DNS events that indicate communication to a C2 domain in MISP",
+    "type": "alert"
   },
   "createTime": "2024-07-15T05:50:39.151535Z",
   "revisionCreateTime": "2024-07-15T05:50:39.151535Z",
