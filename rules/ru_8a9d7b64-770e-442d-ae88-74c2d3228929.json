@@ -8,13 +8,13 @@
     "displayName": "Medium"
   },
   "metadata": {
-    "description": "Detects when an excessive number of permissions are assigned to an Entra ID application within a time window, potentially indicating a greedy permission grab, as a numeric value comparing old permissions to new permissions",
-    "priority": "Medium",
     "type": "alert",
+    "platform": "azure",
     "data_source": "o365",
-    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
+    "description": "Detects when an excessive number of permissions are assigned to an Entra ID application within a time window, potentially indicating a greedy permission grab, as a numeric value comparing old permissions to new permissions",
     "assumption": "This rule does not compare the specific permissions of the old and new permissions. Removing 8 permissions and replacing with 8 different permissions would not cause this rule to trigger",
-    "platform": "azure"
+    "reference": "https://learn.microsoft.com/en-us/graph/permissions-reference",
+    "priority": "Medium"
   },
   "createTime": "2024-05-27T10:45:33.799407Z",
   "revisionCreateTime": "2024-05-27T10:45:33.799407Z",
